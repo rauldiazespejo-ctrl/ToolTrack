@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+tooltrack-*.png
+.swarm/
+.claude-flow/
+ruvector.db
 
 # Editor directories and files
 .vscode/*

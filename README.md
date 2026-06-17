@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# ToolTrack App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ToolTrack is a React + TypeScript inventory dashboard built from the real Excel
+workbook `INVENTARIO GENERAL ACTUALIZADO.xlsx`.
 
-Currently, two official plugins are available:
+The app currently uses the workbook sheet `INVENTARIO VALORIZADO` and preserves
+its source fields: bodega, CECO, estado, grupo, código, descripción, entradas,
+salidas, saldo, valor unitario, and valor total.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- Vite, React 19, TypeScript
+- React Router
+- Chart.js for summaries
+- QR code detail cards
+- Supabase client scaffold
+- Vitest and Testing Library
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint
+npm run test
+npm run build
+npm run preview
 ```
+
+Regenerate the app inventory JSON from the real Excel file:
+
+```bash
+python3 scripts/generate-inventory-json.py \
+  "/Users/rauldiazespejogmail.com/Downloads/INVENTARIO GENERAL ACTUALIZADO.xlsx" \
+  src/data/inventory.generated.json
+```
+
+## Environment
+
+Copy `.env.example` to `.env.local` when connecting Supabase:
+
+```bash
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+```
+
+Use only the browser-safe Supabase Project URL and anon public key. Do not put
+`service_role` keys or keys starting with `sb_secret_` in Vite variables because
+they are exposed to the browser bundle.
+
+The UI works without Supabase because it reads `src/data/inventory.generated.json`.
+Without those variables, QR scan events are stored in browser `localStorage`.
+
+## Product Areas
+
+- Dashboard: total rows, bodegas, CECO, saldo, value, status and group charts.
+- Inventario: search and filters by estado, grupo, bodega, code, CECO.
+- Detail: factual QR card for each real inventory row.
+- Scan: mobile QR landing page for field verification.
+- Eventos: local QR confirmations and differences ready to map to Supabase.
+- Bodegas: value concentration by bodega without invented coordinates.
+- Reportes: value by grupo and estado.
+
+## Data Integrity Notes
+
+- Do not add fake locations, owners, maintenance events, photos, or coordinates.
+- If geospatial maps are needed later, add real coordinates to a source table.
+- Large inventory data is bundled as a generated JSON chunk.
+
+## Production Backend
+
+`supabase/schema.sql` contains the first production schema for imports, inventory
+items, movements, and QR scan events. The frontend still uses generated JSON
+until Supabase credentials and import workflows are configured. QR scan actions
+currently persist in `localStorage` with the same shape planned for
+`qr_scan_events`; when Supabase env vars are present, the app writes scan events
+to Supabase and associates them with the authenticated user.
