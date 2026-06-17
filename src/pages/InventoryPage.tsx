@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Package, Search, Plus, Edit2, Trash2, ArrowUpCircle, ArrowDownCircle, DollarSign, AlertTriangle } from 'lucide-react'
+import { Package, Plus, Edit2, Trash2, ArrowUpCircle, ArrowDownCircle, DollarSign, AlertTriangle } from 'lucide-react'
+import { toast } from 'sonner'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
@@ -9,6 +10,7 @@ import { Modal } from '../components/ui/Modal'
 import { Table, TableRow, TableCell } from '../components/ui/Table'
 import { StatCard } from '../components/shared/StatCard'
 import { useInventory } from '../hooks/useInventory'
+import { useSearch } from '../hooks/useSearch'
 import { formatCurrency } from '../lib/utils'
 import type { InventoryItem } from '../lib/supabase'
 
@@ -69,7 +71,7 @@ const emptyForm: FormData = {
 
 export function InventoryPage() {
   const { inventory, stats, create, update, remove, adjustStock } = useInventory()
-  const [search, setSearch] = useState('')
+  const { query: search } = useSearch()
   const [filterCategory, setFilterCategory] = useState('')
   const [filterWarehouse, setFilterWarehouse] = useState('')
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -119,19 +121,54 @@ export function InventoryPage() {
   }
 
   function handleSave() {
-    if (editingItem) {
-      void update(editingItem.id, form)
-    } else {
-      void create(form)
+    if (form.cost_per_unit < 0) {
+      toast.error('El costo por unidad no puede ser negativo')
+      return
     }
-    setShowCreateModal(false)
+    if (form.quantity < 0) {
+      toast.error('La cantidad no puede ser negativa')
+      return
+    }
+
+    void (async () => {
+      try {
+        if (editingItem) {
+          await update(editingItem.id, form)
+          toast.success('Item actualizado')
+        } else {
+          await create(form)
+          toast.success('Item creado')
+        }
+        setShowCreateModal(false)
+      } catch {
+        toast.error('Error al guardar el item')
+      }
+    })()
   }
 
   function handleAdjust() {
     if (!adjustItem) return
     const delta = adjustDirection === 'in' ? adjustAmount : -adjustAmount
-    void adjustStock(adjustItem.id, delta, adjustReason)
-    setShowAdjustModal(false)
+    void (async () => {
+      try {
+        await adjustStock(adjustItem.id, delta, adjustReason)
+        toast.success('Stock ajustado')
+        setShowAdjustModal(false)
+      } catch {
+        toast.error('Error al ajustar stock')
+      }
+    })()
+  }
+
+  function handleDeleteItem(id: string) {
+    void (async () => {
+      try {
+        await remove(id)
+        toast.success('Item eliminado')
+      } catch {
+        toast.error('Error al eliminar item')
+      }
+    })()
   }
 
   return (
@@ -139,16 +176,6 @@ export function InventoryPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]">Inventario de Consumibles</h1>
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" size={16} />
-            <input
-              type="text"
-              placeholder="Buscar..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] pl-9 pr-3 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/50 outline-none focus:border-[var(--accent)]"
-            />
-          </div>
           <Button icon={<Plus size={16} />} onClick={openCreate}>Nuevo Item</Button>
         </div>
       </div>
@@ -232,7 +259,7 @@ export function InventoryPage() {
                     <button onClick={() => openEdit(item)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => { void remove(item.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { void handleDeleteItem(item.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
                       <Trash2 size={16} />
                     </button>
                   </div>

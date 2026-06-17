@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, Pencil, Trash2, Package, Truck, HardHat, ShieldCheck } from 'lucide-react'
+import { toast } from 'sonner'
 import { useEquipment } from '../hooks/useEquipment'
+import { useSearch } from '../hooks/useSearch'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
@@ -99,8 +101,8 @@ const emptyForm: FormData = {
 export function EquipmentPage() {
   const navigate = useNavigate()
   const { equipment, stats, create, update, remove } = useEquipment()
+  const { query: search } = useSearch()
 
-  const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterSite, setFilterSite] = useState('')
@@ -157,6 +159,26 @@ export function EquipmentPage() {
       return
     }
 
+    const cost = Number(form.purchase_cost) || 0
+    if (cost < 0) {
+      toast.error('El costo de compra no puede ser negativo')
+      return
+    }
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const pDate = new Date(form.purchase_date)
+    if (pDate > today) {
+      toast.error('La fecha de compra no puede estar en el futuro')
+      return
+    }
+
+    const existing = equipment.find(e => e.serial_number === form.serial_number.trim() && e.id !== editingId)
+    if (existing) {
+      toast.error('El número de serie ya existe')
+      return
+    }
+
     const data = {
       name: form.name.trim(),
       type: form.type,
@@ -167,21 +189,36 @@ export function EquipmentPage() {
       location_site: form.location_site,
       assigned_to: form.assigned_to.trim() || null,
       purchase_date: form.purchase_date,
-      purchase_cost: Number(form.purchase_cost) || 0,
+      purchase_cost: cost,
       photo_url: form.photo_url,
     }
 
-    if (editingId) {
-      void update(editingId, data)
-    } else {
-      void create(data)
-    }
-    setModalOpen(false)
+    void (async () => {
+      try {
+        if (editingId) {
+          await update(editingId, data)
+          toast.success('Equipo actualizado')
+        } else {
+          await create(data)
+          toast.success('Equipo creado')
+        }
+        setModalOpen(false)
+      } catch {
+        toast.error('Error al guardar el equipo')
+      }
+    })()
   }
 
   function handleDelete(id: string) {
-    void remove(id)
-    setDeleteConfirm(null)
+    void (async () => {
+      try {
+        await remove(id)
+        toast.success('Equipo eliminado')
+        setDeleteConfirm(null)
+      } catch {
+        toast.error('Error al eliminar el equipo')
+      }
+    })()
   }
 
   function setField(field: keyof FormData, value: string) {
@@ -211,14 +248,6 @@ export function EquipmentPage() {
       <Card padding={false}>
         <div className="border-b border-[var(--border)] p-4">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
-            <div className="flex-1">
-              <Input
-                placeholder="Buscar por nombre, serial o marca..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="!bg-[var(--bg-secondary)]"
-              />
-            </div>
             <div className="flex flex-wrap gap-3">
               <div className="w-40">
                 <Select
@@ -373,3 +402,4 @@ export function EquipmentPage() {
     </div>
   )
 }
+

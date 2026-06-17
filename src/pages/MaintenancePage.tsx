@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Wrench, Plus, ClipboardList, LayoutGrid, List, Clock, CheckCircle2, AlertTriangle, Calendar, User } from 'lucide-react'
+import { toast } from 'sonner'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
@@ -85,16 +86,54 @@ export function MaintenancePage() {
   }
 
   function handleSave() {
-    if (editingOrder) {
-      void update(editingOrder.id, form)
-    } else {
-      void create(form)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const sDate = new Date(form.scheduled_date)
+    if (sDate < today) {
+      toast.error('La fecha programada no puede estar en el pasado')
+      return
     }
-    setShowModal(false)
+    if (form.cost < 0) {
+      toast.error('El costo no puede ser negativo')
+      return
+    }
+
+    void (async () => {
+      try {
+        if (editingOrder) {
+          await update(editingOrder.id, form)
+          toast.success('Orden actualizada')
+        } else {
+          await create(form)
+          toast.success('Orden creada')
+        }
+        setShowModal(false)
+      } catch {
+        toast.error('Error al guardar la orden')
+      }
+    })()
   }
 
-  function handleComplete(id: string) {
-    void complete(id)
+  function handleCompleteOrder(id: string) {
+    void (async () => {
+      try {
+        await complete(id)
+        toast.success('Orden completada')
+      } catch {
+        toast.error('Error al completar la orden')
+      }
+    })()
+  }
+
+  function handleDeleteOrder(id: string) {
+    void (async () => {
+      try {
+        await remove(id)
+        toast.success('Orden eliminada')
+      } catch {
+        toast.error('Error al eliminar la orden')
+      }
+    })()
   }
 
   const columns: { key: MaintenanceOrder['status']; label: string; color: string }[] = [
@@ -218,14 +257,14 @@ export function MaintenancePage() {
                 <TableCell>
                   <div className="flex items-center gap-1">
                     {order.status !== 'completado' && (
-                      <button onClick={() => { void handleComplete(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
+                      <button onClick={() => { handleCompleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
                         <CheckCircle2 size={16} />
                       </button>
                     )}
                     <button onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
                       <Wrench size={16} />
                     </button>
-                    <button onClick={() => { void remove(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { handleDeleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
                       <AlertTriangle size={16} />
                     </button>
                   </div>
@@ -293,7 +332,7 @@ export function MaintenancePage() {
               <Button
                 variant="secondary"
                 icon={<CheckCircle2 size={16} />}
-                onClick={() => { handleComplete(editingOrder.id); setShowModal(false) }}
+                onClick={() => { handleCompleteOrder(editingOrder.id); setShowModal(false) }}
               >
                 Completar Orden
               </Button>
