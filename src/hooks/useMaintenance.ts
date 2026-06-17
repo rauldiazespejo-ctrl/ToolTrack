@@ -1,57 +1,51 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { MaintenanceOrder } from '../lib/supabase'
 import { seedMaintenance } from '../data/seed'
-import { generateId } from '../lib/utils'
+import { createAdapter } from '../services'
 
-const STORAGE_KEY = 'tooltrack_maintenance'
-
-function loadMaintenance(): MaintenanceOrder[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) return JSON.parse(stored)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedMaintenance))
-  return seedMaintenance
-}
-
-function saveMaintenance(items: MaintenanceOrder[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-}
+const adapter = createAdapter<MaintenanceOrder>('tooltrack_maintenance', 'maintenance_orders', seedMaintenance)
 
 export function useMaintenance() {
-  const [orders, setOrders] = useState<MaintenanceOrder[]>(loadMaintenance)
+  const [orders, setOrders] = useState<MaintenanceOrder[]>(() => {
+    const stored = localStorage.getItem('tooltrack_maintenance')
+    if (stored) return JSON.parse(stored)
+    return seedMaintenance
+  })
   const [loading, setLoading] = useState(false)
 
-  const refresh = useCallback(() => {
-    setOrders(loadMaintenance())
+  useEffect(() => {
+    adapter.getAll().then(setOrders)
   }, [])
 
-  const create = useCallback((data: Omit<MaintenanceOrder, 'id'>) => {
+  const refresh = useCallback(async () => {
     setLoading(true)
-    const newOrder: MaintenanceOrder = { ...data, id: generateId() }
-    const updated = [...loadMaintenance(), newOrder]
-    saveMaintenance(updated)
-    setOrders(updated)
+    const items = await adapter.getAll()
+    setOrders(items)
+    setLoading(false)
+  }, [])
+
+  const create = useCallback(async (data: Omit<MaintenanceOrder, 'id'>) => {
+    setLoading(true)
+    const newOrder = await adapter.create(data)
+    setOrders(prev => [...prev, newOrder])
     setLoading(false)
     return newOrder
   }, [])
 
-  const update = useCallback((id: string, data: Partial<MaintenanceOrder>) => {
+  const update = useCallback(async (id: string, data: Partial<MaintenanceOrder>) => {
     setLoading(true)
-    const items = loadMaintenance()
-    const updated = items.map(item => item.id === id ? { ...item, ...data } : item)
-    saveMaintenance(updated)
-    setOrders(updated)
+    const updated = await adapter.update(id, data)
+    setOrders(prev => prev.map(item => item.id === id ? updated : item))
     setLoading(false)
   }, [])
 
-  const remove = useCallback((id: string) => {
-    const items = loadMaintenance()
-    const updated = items.filter(item => item.id !== id)
-    saveMaintenance(updated)
-    setOrders(updated)
+  const remove = useCallback(async (id: string) => {
+    await adapter.remove(id)
+    setOrders(prev => prev.filter(item => item.id !== id))
   }, [])
 
-  const complete = useCallback((id: string) => {
-    update(id, { status: 'completado', completed_date: new Date().toISOString().split('T')[0] })
+  const complete = useCallback(async (id: string) => {
+    await update(id, { status: 'completado', completed_date: new Date().toISOString().split('T')[0] })
   }, [update])
 
   const stats = {

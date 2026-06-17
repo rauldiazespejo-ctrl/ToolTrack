@@ -1,46 +1,40 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { Alert } from '../lib/supabase'
 import { seedAlerts } from '../data/seed'
+import { createAdapter } from '../services'
 
-const STORAGE_KEY = 'tooltrack_alerts'
-
-function loadAlerts(): Alert[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) return JSON.parse(stored)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedAlerts))
-  return seedAlerts
-}
-
-function saveAlerts(items: Alert[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-}
+const adapter = createAdapter<Alert>('tooltrack_alerts', 'alerts', seedAlerts)
 
 export function useAlerts() {
-  const [alerts, setAlerts] = useState<Alert[]>(loadAlerts)
+  const [alerts, setAlerts] = useState<Alert[]>(() => {
+    const stored = localStorage.getItem('tooltrack_alerts')
+    if (stored) return JSON.parse(stored)
+    return seedAlerts
+  })
 
-  const refresh = useCallback(() => {
-    setAlerts(loadAlerts())
+  useEffect(() => {
+    adapter.getAll().then(setAlerts)
   }, [])
 
-  const markRead = useCallback((id: string) => {
-    const items = loadAlerts()
-    const updated = items.map(item => item.id === id ? { ...item, is_read: true } : item)
-    saveAlerts(updated)
-    setAlerts(updated)
+  const refresh = useCallback(async () => {
+    const items = await adapter.getAll()
+    setAlerts(items)
   }, [])
 
-  const markAllRead = useCallback(() => {
-    const items = loadAlerts()
-    const updated = items.map(item => ({ ...item, is_read: true }))
-    saveAlerts(updated)
-    setAlerts(updated)
+  const markRead = useCallback(async (id: string) => {
+    const updated = await adapter.update(id, { is_read: true })
+    setAlerts(prev => prev.map(item => item.id === id ? updated : item))
   }, [])
 
-  const dismiss = useCallback((id: string) => {
-    const items = loadAlerts()
-    const updated = items.filter(item => item.id !== id)
-    saveAlerts(updated)
-    setAlerts(updated)
+  const markAllRead = useCallback(async () => {
+    const items = await adapter.getAll()
+    await Promise.all(items.map(item => adapter.update(item.id, { is_read: true })))
+    setAlerts(prev => prev.map(item => ({ ...item, is_read: true })))
+  }, [])
+
+  const dismiss = useCallback(async (id: string) => {
+    await adapter.remove(id)
+    setAlerts(prev => prev.filter(item => item.id !== id))
   }, [])
 
   const unreadCount = alerts.filter(a => !a.is_read).length

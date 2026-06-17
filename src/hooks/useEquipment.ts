@@ -1,68 +1,60 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { Equipment } from '../lib/supabase'
 import { seedEquipment } from '../data/seed'
-import { generateId } from '../lib/utils'
+import { createAdapter } from '../services'
 
-const STORAGE_KEY = 'tooltrack_equipment'
-
-function loadEquipment(): Equipment[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) return JSON.parse(stored)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedEquipment))
-  return seedEquipment
-}
-
-function saveEquipment(items: Equipment[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-}
+const adapter = createAdapter<Equipment>('tooltrack_equipment', 'equipment', seedEquipment)
 
 export function useEquipment() {
-  const [equipment, setEquipment] = useState<Equipment[]>(loadEquipment)
+  const [equipment, setEquipment] = useState<Equipment[]>(() => {
+    const stored = localStorage.getItem('tooltrack_equipment')
+    if (stored) return JSON.parse(stored)
+    return seedEquipment
+  })
   const [loading, setLoading] = useState(false)
 
-  const refresh = useCallback(() => {
-    setEquipment(loadEquipment())
+  useEffect(() => {
+    adapter.getAll().then(setEquipment)
   }, [])
 
-  const create = useCallback((data: Omit<Equipment, 'id' | 'created_at' | 'updated_at' | 'qr_code'>) => {
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    const items = await adapter.getAll()
+    setEquipment(items)
+    setLoading(false)
+  }, [])
+
+  const create = useCallback(async (data: Omit<Equipment, 'id' | 'created_at' | 'updated_at' | 'qr_code'>) => {
     setLoading(true)
     const now = new Date().toISOString()
-    const id = generateId()
-    const newItem: Equipment = {
+    const created = await adapter.create({
       ...data,
-      id,
-      qr_code: `SOLDESP-${id.toUpperCase()}`,
       created_at: now,
       updated_at: now,
-    }
-    const updated = [...loadEquipment(), newItem]
-    saveEquipment(updated)
-    setEquipment(updated)
+    } as Omit<Equipment, 'id'>)
+    const withQr = await adapter.update(created.id, {
+      qr_code: `SOLDESP-${created.id.toUpperCase()}`,
+    } as Partial<Equipment>)
+    setEquipment(prev => [...prev, withQr])
     setLoading(false)
-    return newItem
+    return withQr
   }, [])
 
-  const update = useCallback((id: string, data: Partial<Equipment>) => {
+  const update = useCallback(async (id: string, data: Partial<Equipment>) => {
     setLoading(true)
-    const items = loadEquipment()
-    const updated = items.map(item =>
-      item.id === id ? { ...item, ...data, updated_at: new Date().toISOString() } : item
-    )
-    saveEquipment(updated)
-    setEquipment(updated)
+    const updated = await adapter.update(id, { ...data, updated_at: new Date().toISOString() })
+    setEquipment(prev => prev.map(item => item.id === id ? updated : item))
     setLoading(false)
   }, [])
 
-  const remove = useCallback((id: string) => {
-    const items = loadEquipment()
-    const updated = items.filter(item => item.id !== id)
-    saveEquipment(updated)
-    setEquipment(updated)
+  const remove = useCallback(async (id: string) => {
+    await adapter.remove(id)
+    setEquipment(prev => prev.filter(item => item.id !== id))
   }, [])
 
   const getById = useCallback((id: string) => {
-    return loadEquipment().find(item => item.id === id) ?? null
-  }, [])
+    return equipment.find(item => item.id === id) ?? null
+  }, [equipment])
 
   const stats = {
     total: equipment.length,

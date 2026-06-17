@@ -1,66 +1,59 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { InventoryItem } from '../lib/supabase'
 import { seedInventory } from '../data/seed'
-import { generateId } from '../lib/utils'
+import { createAdapter } from '../services'
 
-const STORAGE_KEY = 'tooltrack_inventory'
-
-function loadInventory(): InventoryItem[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) return JSON.parse(stored)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedInventory))
-  return seedInventory
-}
-
-function saveInventory(items: InventoryItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-}
+const adapter = createAdapter<InventoryItem>('tooltrack_inventory', 'inventory', seedInventory)
 
 export function useInventory() {
-  const [inventory, setInventory] = useState<InventoryItem[]>(loadInventory)
+  const [inventory, setInventory] = useState<InventoryItem[]>(() => {
+    const stored = localStorage.getItem('tooltrack_inventory')
+    if (stored) return JSON.parse(stored)
+    return seedInventory
+  })
   const [loading, setLoading] = useState(false)
 
-  const refresh = useCallback(() => {
-    setInventory(loadInventory())
+  useEffect(() => {
+    adapter.getAll().then(setInventory)
   }, [])
 
-  const create = useCallback((data: Omit<InventoryItem, 'id'>) => {
+  const refresh = useCallback(async () => {
     setLoading(true)
-    const newItem: InventoryItem = { ...data, id: generateId() }
-    const updated = [...loadInventory(), newItem]
-    saveInventory(updated)
-    setInventory(updated)
+    const items = await adapter.getAll()
+    setInventory(items)
+    setLoading(false)
+  }, [])
+
+  const create = useCallback(async (data: Omit<InventoryItem, 'id'>) => {
+    setLoading(true)
+    const newItem = await adapter.create(data)
+    setInventory(prev => [...prev, newItem])
     setLoading(false)
     return newItem
   }, [])
 
-  const update = useCallback((id: string, data: Partial<InventoryItem>) => {
+  const update = useCallback(async (id: string, data: Partial<InventoryItem>) => {
     setLoading(true)
-    const items = loadInventory()
-    const updated = items.map(item => item.id === id ? { ...item, ...data } : item)
-    saveInventory(updated)
-    setInventory(updated)
+    const updated = await adapter.update(id, data)
+    setInventory(prev => prev.map(item => item.id === id ? updated : item))
     setLoading(false)
   }, [])
 
-  const remove = useCallback((id: string) => {
-    const items = loadInventory()
-    const updated = items.filter(item => item.id !== id)
-    saveInventory(updated)
-    setInventory(updated)
+  const remove = useCallback(async (id: string) => {
+    await adapter.remove(id)
+    setInventory(prev => prev.filter(item => item.id !== id))
   }, [])
 
-  const adjustStock = useCallback((id: string, delta: number, reason: string) => {
-    const items = loadInventory()
-    const updated = items.map(item => {
-      if (item.id === id) {
-        const newQty = Math.max(0, item.quantity + delta)
-        return { ...item, quantity: newQty, last_restock: delta > 0 ? new Date().toISOString().split('T')[0] : item.last_restock }
-      }
-      return item
+  const adjustStock = useCallback(async (id: string, delta: number, reason: string) => {
+    const items = await adapter.getAll()
+    const item = items.find(i => i.id === id)
+    if (!item) return
+    const newQty = Math.max(0, item.quantity + delta)
+    const updated = await adapter.update(id, {
+      quantity: newQty,
+      last_restock: delta > 0 ? new Date().toISOString().split('T')[0] : item.last_restock,
     })
-    saveInventory(updated)
-    setInventory(updated)
+    setInventory(prev => prev.map(i => i.id === id ? updated : i))
     void reason
   }, [])
 
