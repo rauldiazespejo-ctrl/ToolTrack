@@ -11,6 +11,16 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="text/javascript">
+      // SPA redirect handler for GitHub Pages
+      var redirect = sessionStorage.getItem('spa-redirect');
+      if (redirect) {
+        sessionStorage.removeItem('spa-redirect');
+        if (redirect !== window.location.pathname.replace('/ToolTrack/', '')) {
+          window.history.replaceState(null, null, '/ToolTrack/' + redirect);
+        }
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
