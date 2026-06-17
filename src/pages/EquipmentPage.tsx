@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Wrench, Plus, Search, Pencil, Trash2, Package, Truck, HardHat, ShieldCheck } from 'lucide-react'
+import { Plus, Search, Pencil, Trash2, Package, Truck, HardHat, ShieldCheck } from 'lucide-react'
 import { useEquipment } from '../hooks/useEquipment'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
@@ -10,7 +10,7 @@ import { Select } from '../components/ui/Select'
 import { Modal } from '../components/ui/Modal'
 import { Table, TableRow, TableCell } from '../components/ui/Table'
 import { StatCard } from '../components/shared/StatCard'
-import { formatCurrency, formatDate, getStatusColor } from '../lib/utils'
+
 import type { Equipment } from '../lib/supabase'
 
 const typeLabels: Record<string, string> = {
@@ -253,7 +253,7 @@ export function EquipmentPage() {
         ) : (
           <Table headers={['Nombre', 'Tipo', 'Serial', 'Ubicación', 'Estado', 'Asignado a', 'Acciones']}>
             {filtered.map(eq => (
-              <TableRow key={eq.id} onClick={() => navigate(`/equipment/${eq.id}`)}>
+              <TableRow key={eq.id} onClick={() => void navigate(`/equipment/${eq.id}`)}>
                 <TableCell>
                   <span className="font-medium">{eq.name}</span>
                   {eq.brand && <span className="block text-xs text-[var(--text-secondary)]">{eq.brand} {eq.model}</span>}
