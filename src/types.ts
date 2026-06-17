@@ -47,3 +47,50 @@ export type ScanEvent = {
   notes: string
   createdAt: string
 }
+
+export type AvailabilityStatus =
+  | 'available'
+  | 'needs_review'
+  | 'out_of_stock'
+  | 'blocked'
+
+export type AssetRequestStatus =
+  | 'pending_approval'
+  | 'approved'
+  | 'warehouse_queue'
+  | 'ready_to_dispatch'
+  | 'dispatched'
+  | 'closed'
+  | 'quote_required'
+  | 'rejected'
+
+export type AssetRequestPriority = 'normal' | 'urgent' | 'critical'
+
+export type AssetRequest = {
+  id: string
+  inventoryItemId: string
+  itemCode: string
+  description: string
+  warehouse: string
+  ceco: number | string | null
+  group: string
+  quantity: number
+  requestedBy: string
+  contract: string
+  neededAt: string
+  priority: AssetRequestPriority
+  status: AssetRequestStatus
+  availabilityStatus: AvailabilityStatus
+  reason: string
+  createdAt: string
+}
+
+export type ComplianceCandidate = {
+  inventoryItemId: string
+  itemCode: string
+  description: string
+  warehouse: string
+  group: string
+  signal: 'requires_classification' | 'document_not_loaded'
+  reason: string
+}

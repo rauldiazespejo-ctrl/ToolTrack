@@ -1202,6 +1202,116 @@ th {
   gap: 12px;
 }
 
+.ops-command {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+.request-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.request-query,
+.request-form-grid textarea {
+  grid-column: 1 / -1;
+}
+
+.request-form-grid input,
+.request-form-grid textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+.request-form-grid textarea {
+  min-height: 82px;
+  padding-top: 12px;
+  resize: vertical;
+}
+
+.ops-summary {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.ops-metric {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+  padding: 14px;
+}
+
+.ops-metric svg {
+  color: var(--red);
+}
+
+.ops-metric span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.ops-metric strong {
+  color: var(--ink);
+  font-size: 1.35rem;
+}
+
+.row-action {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #111827;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0 10px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.request-table,
+.compliance-table {
+  min-width: 980px;
+}
+
+.compliance-meter {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-top: 16px;
+  border-left: 4px solid var(--amber);
+  background: #fffbeb;
+  padding: 18px;
+}
+
+.compliance-meter svg {
+  color: var(--amber);
+}
+
+.compliance-meter strong {
+  color: var(--ink);
+  font-size: 2.5rem;
+}
+
+.compliance-meter span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
 .warehouse-rank {
   display: grid;
   gap: 10px;
@@ -1288,7 +1398,8 @@ th {
   .map-layout,
   .report-grid,
   .detail-grid,
-  .asset-command {
+  .asset-command,
+  .ops-command {
     grid-template-columns: 1fr;
   }
 
@@ -1329,6 +1440,7 @@ th {
 
   .nav-list,
   .stats-grid,
+  .request-form-grid,
   .asset-profile .detail-list {
     grid-template-columns: 1fr;
   }

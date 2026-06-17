@@ -1,5 +1,10 @@
 import { inventoryItems } from '../data/inventory'
-import type { InventoryAggregate, InventoryItem } from '../types'
+import type {
+  AvailabilityStatus,
+  ComplianceCandidate,
+  InventoryAggregate,
+  InventoryItem,
+} from '../types'
 
 export function getInventoryStats(items: InventoryItem[] = inventoryItems) {
   const totalValue = items.reduce((sum, item) => sum + item.totalValue, 0)
@@ -102,4 +107,60 @@ export function getStatusTone(status: string) {
   if (status === 'ACTIVA') return 'positive'
   if (status === 'CERRADO') return 'neutral'
   return 'info'
+}
+
+export function getAvailabilityStatus(item: InventoryItem): AvailabilityStatus {
+  if (item.balance <= 0) return 'out_of_stock'
+  if (item.status === 'ACTIVA') return 'available'
+  if (item.status === 'CERRADO') return 'needs_review'
+  return 'blocked'
+}
+
+export function getAvailabilityLabel(status: AvailabilityStatus) {
+  const labels: Record<AvailabilityStatus, string> = {
+    available: 'Disponible',
+    blocked: 'Bloqueado',
+    needs_review: 'Requiere validación',
+    out_of_stock: 'Sin existencia',
+  }
+
+  return labels[status]
+}
+
+export function getAvailabilityTone(status: AvailabilityStatus) {
+  if (status === 'available') return 'positive'
+  if (status === 'needs_review') return 'warning'
+  if (status === 'out_of_stock') return 'danger'
+  return 'neutral'
+}
+
+export function getComplianceCandidates(
+  items: InventoryItem[] = inventoryItems,
+): ComplianceCandidate[] {
+  const patterns = [
+    'TECLE',
+    'ESLINGA',
+    'EXTINTOR',
+    'MAQUINA DE SOLDAR',
+    'EQUIPO TIG',
+    'LINEA DE VIDA',
+    'GRILLETE',
+    'PIE DE METRO',
+  ]
+
+  return items
+    .filter((item) =>
+      patterns.some((pattern) => item.description.toUpperCase().includes(pattern)),
+    )
+    .slice(0, 120)
+    .map((item) => ({
+      description: item.description,
+      group: item.group,
+      inventoryItemId: item.id,
+      itemCode: item.code,
+      reason:
+        'Candidato a control documental por descripción. Falta cargar regla real de certificación/calibración.',
+      signal: 'requires_classification',
+      warehouse: item.warehouse,
+    }))
 }

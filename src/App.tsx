@@ -30,6 +30,17 @@ const ScanEvents = lazy(() =>
 const Login = lazy(() =>
   import('./pages/Login').then((module) => ({ default: module.Login })),
 )
+const Requests = lazy(() =>
+  import('./pages/Requests').then((module) => ({ default: module.Requests })),
+)
+const WarehouseOps = lazy(() =>
+  import('./pages/WarehouseOps').then((module) => ({
+    default: module.WarehouseOps,
+  })),
+)
+const Compliance = lazy(() =>
+  import('./pages/Compliance').then((module) => ({ default: module.Compliance })),
+)
 
 function RouteFallback() {
   return <div className="route-fallback">Loading workspace...</div>
@@ -51,6 +62,9 @@ const router = createBrowserRouter([
       { path: 'qr', element: withSuspense(<QRLabels />) },
       { path: 'scan/:toolId', element: withSuspense(<ScanAsset />) },
       { path: 'events', element: withSuspense(<ScanEvents />) },
+      { path: 'requests', element: withSuspense(<Requests />) },
+      { path: 'warehouse', element: withSuspense(<WarehouseOps />) },
+      { path: 'compliance', element: withSuspense(<Compliance />) },
       { path: 'login', element: withSuspense(<Login />) },
       { path: 'reports', element: withSuspense(<Reports />) },
     ],

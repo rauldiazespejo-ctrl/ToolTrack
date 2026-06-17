@@ -67,6 +67,9 @@ Without those variables, QR scan events are stored in browser `localStorage`.
 
 - Dashboard: total rows, bodegas, CECO, saldo, value, status and group charts.
 - Inventario: search and filters by estado, grupo, bodega, code, CECO.
+- Solicitudes: availability lookup, request creation, warehouse queue and quote routing.
+- Bodega: operational queue for approvals, dispatch preparation and quote needs.
+- Cumplimiento: certification/calibration/maintenance candidates without invented dates.
 - Detail: factual QR card for each real inventory row.
 - Scan: mobile QR landing page for field verification.
 - Eventos: local QR confirmations and differences ready to map to Supabase.
@@ -78,6 +81,9 @@ Without those variables, QR scan events are stored in browser `localStorage`.
 - Do not add fake locations, owners, maintenance events, photos, or coordinates.
 - If geospatial maps are needed later, add real coordinates to a source table.
 - Large inventory data is bundled as a generated JSON chunk.
+- Certification and calibration alerts require real document dates. Until those
+  are loaded, the app shows candidates for classification instead of fake due
+  dates.
 
 ## Production Backend
 

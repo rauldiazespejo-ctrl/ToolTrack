@@ -3,10 +3,12 @@ import {
   Boxes,
   ClipboardCheck,
   ClipboardList,
+  FileWarning,
   LayoutDashboard,
   QrCode,
   Search,
   Settings,
+  Send,
   Warehouse,
   Wrench,
 } from 'lucide-react'
@@ -16,6 +18,9 @@ import { useAuth } from '../lib/auth'
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/tools', label: 'Inventario', icon: Boxes },
+  { to: '/requests', label: 'Solicitudes', icon: Send },
+  { to: '/warehouse', label: 'Bodega', icon: Warehouse },
+  { to: '/compliance', label: 'Cumplimiento', icon: FileWarning },
   { to: '/map', label: 'Bodegas', icon: Warehouse },
   { to: '/qr', label: 'Etiquetas QR', icon: QrCode },
   { to: '/events', label: 'Eventos', icon: ClipboardList },

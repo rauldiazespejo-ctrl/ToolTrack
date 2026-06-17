@@ -37,7 +37,21 @@ python3 scripts/generate-supabase-seed.py \
 Review `supabase/seed.generated.sql`, then run it in Supabase after the schema.
 The generated seed is ignored by Git because it is operational output.
 
-## 3. Frontend Verification
+## 3. Operational Modules
+
+The first implementation slice includes:
+
+- Asset requests generated from real inventory rows.
+- Availability derived from `saldo` and `estado`.
+- Quote routing when an item has no available operational stock or requires review.
+- Warehouse queue for pending/approved/prepared requests.
+- Compliance candidate list for assets that may need certificates, calibrations
+  or maintenance rules.
+
+Do not activate dispatch blocking until real document rules and expiration dates
+are loaded.
+
+## 4. Frontend Verification
 
 Run:
 
@@ -53,11 +67,14 @@ Then verify these routes:
 - `/`
 - `/tools`
 - `/qr`
+- `/requests`
+- `/warehouse`
+- `/compliance`
 - `/scan/acb-1000053-1?v=1&code=ACB-1000053`
 - `/events`
 - `/login`
 
-## 4. Deployment
+## 5. Deployment
 
 The repo includes SPA fallback files for Vercel and Netlify-style hosts:
 
@@ -76,13 +93,13 @@ Output directory:
 dist
 ```
 
-## 5. GitHub CI
+## 6. GitHub CI
 
 The CI template is stored at `docs/github-actions-ci.yml`. Copy it to
 `.github/workflows/ci.yml` from a GitHub token with `workflow` scope enabled.
 The current backup token cannot create workflow files directly.
 
-## 6. Data Rules
+## 7. Data Rules
 
 - Keep generated UI values tied to the real workbook or Supabase tables.
 - Do not invent owners, GPS coordinates, maintenance dates, photos, or custody history.
