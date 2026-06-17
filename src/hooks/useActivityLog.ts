@@ -1,37 +1,32 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { ActivityLog } from '../lib/supabase'
 import { seedActivityLog } from '../data/seed'
-import { generateId } from '../lib/utils'
+import { createAdapter } from '../services'
 
-const STORAGE_KEY = 'tooltrack_activity_log'
-
-function loadLog(): ActivityLog[] {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored) return JSON.parse(stored)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedActivityLog))
-  return seedActivityLog
-}
-
-function saveLog(items: ActivityLog[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-}
+const adapter = createAdapter<ActivityLog>('tooltrack_activity_log', 'activity_logs', seedActivityLog)
 
 export function useActivityLog() {
-  const [logs, setLogs] = useState<ActivityLog[]>(loadLog)
+  const [logs, setLogs] = useState<ActivityLog[]>(() => {
+    const stored = localStorage.getItem('tooltrack_activity_log')
+    if (stored) return JSON.parse(stored)
+    return seedActivityLog
+  })
 
-  const refresh = useCallback(() => {
-    setLogs(loadLog())
+  useEffect(() => {
+    adapter.getAll().then(setLogs)
   }, [])
 
-  const addEntry = useCallback((data: Omit<ActivityLog, 'id' | 'created_at'>) => {
-    const entry: ActivityLog = {
+  const refresh = useCallback(async () => {
+    const items = await adapter.getAll()
+    setLogs(items)
+  }, [])
+
+  const addEntry = useCallback(async (data: Omit<ActivityLog, 'id' | 'created_at'>) => {
+    const entry = await adapter.create({
       ...data,
-      id: generateId(),
       created_at: new Date().toISOString(),
-    }
-    const updated = [entry, ...loadLog()]
-    saveLog(updated)
-    setLogs(updated)
+    } as Omit<ActivityLog, 'id'>)
+    setLogs(prev => [entry, ...prev])
     return entry
   }, [])
 
