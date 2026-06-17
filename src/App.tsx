@@ -1,5 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import { AppLayout } from './components/layout/AppLayout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import { DashboardPage } from './pages/DashboardPage'
 import { EquipmentPage } from './pages/EquipmentPage'
 import { EquipmentDetailPage } from './pages/EquipmentDetailPage'
@@ -12,18 +14,22 @@ import { LoginPage } from './pages/LoginPage'
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route element={<AppLayout />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="equipment" element={<EquipmentPage />} />
-        <Route path="equipment/:id" element={<EquipmentDetailPage />} />
-        <Route path="inventory" element={<InventoryPage />} />
-        <Route path="maintenance" element={<MaintenancePage />} />
-        <Route path="alerts" element={<AlertsPage />} />
-        <Route path="map" element={<MapPage />} />
-        <Route path="settings" element={<SettingsPage />} />
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="equipment" element={<EquipmentPage />} />
+            <Route path="equipment/:id" element={<EquipmentDetailPage />} />
+            <Route path="inventory" element={<InventoryPage />} />
+            <Route path="maintenance" element={<MaintenancePage />} />
+            <Route path="alerts" element={<AlertsPage />} />
+            <Route path="map" element={<MapPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </AuthProvider>
   )
 }

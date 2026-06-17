@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import { Search, Bell } from 'lucide-react'
+import { useAuth } from '../../hooks/useAuth'
+import { useAlerts } from '../../hooks/useAlerts'
 
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -16,9 +18,19 @@ function getPageTitle(pathname: string): string {
   return pageTitles[pathname] || 'SOLDESP ToolTrack'
 }
 
+function getAvatarFallback(user: ReturnType<typeof useAuth>['user']): string {
+  if (!user) return 'U'
+  const email = user.email || ''
+  if (!email) return 'U'
+  return email.slice(0, 2).toUpperCase()
+}
+
 export function Header() {
   const location = useLocation()
   const title = getPageTitle(location.pathname)
+  const { user } = useAuth()
+  const { unreadCount } = useAlerts()
+  const avatarFallback = getAvatarFallback(user)
 
   return (
     <header className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-secondary)] px-6 py-4">
@@ -38,13 +50,15 @@ export function Header() {
 
         <button className="relative rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors cursor-pointer">
           <Bell size={20} />
-          <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--danger)] text-[10px] font-bold text-white">
-            3
-          </span>
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--danger)] text-[10px] font-bold text-white">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
         </button>
 
         <div className="hidden sm:flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)]/20 text-xs font-bold text-[var(--accent)]">
-          RD
+          {avatarFallback}
         </div>
       </div>
     </header>

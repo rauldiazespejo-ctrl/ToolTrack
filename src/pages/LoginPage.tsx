@@ -3,14 +3,46 @@ import { useNavigate } from 'react-router-dom'
 import { HardHat, LogIn } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import { useAuth } from '../hooks/useAuth'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const { signIn, isAuthenticated } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
 
-  function handleSubmit(e: React.FormEvent) {
+  if (isAuthenticated) {
+    navigate('/', { replace: true })
+  }
+
+  function validate(): boolean {
+    const errors: { email?: string; password?: string } = {}
+    if (!email.trim()) {
+      errors.email = 'El correo es obligatorio'
+    } else if (!email.includes('@')) {
+      errors.email = 'Ingrese un correo valido'
+    }
+    if (!password.trim()) {
+      errors.password = 'La contrasena es obligatoria'
+    }
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError(null)
+    if (!validate()) return
+    setIsSubmitting(true)
+    const { error: signInError } = await signIn(email.trim(), password)
+    setIsSubmitting(false)
+    if (signInError) {
+      setError(signInError.message || 'Error al iniciar sesion')
+      return
+    }
     navigate('/')
   }
 
@@ -31,17 +63,24 @@ export function LoginPage() {
             type="email"
             placeholder="usuario@soldesp.cl"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }}
+            error={fieldErrors.email}
           />
           <Input
             label="Contrasena"
             type="password"
             placeholder="Ingrese su contrasena"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={e => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
+            error={fieldErrors.password}
           />
-          <Button type="submit" className="w-full" icon={<LogIn size={16} />}>
-            Iniciar Sesion
+
+          {error && (
+            <p className="text-xs text-red-400">{error}</p>
+          )}
+
+          <Button type="submit" className="w-full" icon={<LogIn size={16} />} disabled={isSubmitting}>
+            {isSubmitting ? 'Iniciando...' : 'Iniciar Sesion'}
           </Button>
         </form>
 
