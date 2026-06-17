@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SOLDESP ToolTrack</title>
+    <script type="text/javascript">
+      // SPA redirect for GitHub Pages
+      // Store the route in sessionStorage and redirect to index
+      var path = window.location.pathname;
+      var base = '/ToolTrack/';
+      if (path.startsWith(base)) {
+        path = path.slice(base.length);
+      }
+      if (path) {
+        sessionStorage.setItem('spa-redirect', path + window.location.search + window.location.hash);
+      }
+      window.location.replace(base);
+    </script>
+  </head>
+  <body>
+    <p>Redirigiendo...</p>
+  </body>
+</html>

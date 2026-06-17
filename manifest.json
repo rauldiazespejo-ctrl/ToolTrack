@@ -1,0 +1,15 @@
+{
+  "name": "SOLDESP ToolTrack",
+  "short_name": "ToolTrack",
+  "theme_color": "#0a0f1a",
+  "background_color": "#0a0f1a",
+  "display": "standalone",
+  "start_url": "/ToolTrack/",
+  "icons": [
+    {
+      "src": "/ToolTrack/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
