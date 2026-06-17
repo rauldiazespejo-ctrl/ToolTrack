@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+.swarm/
+.claude-flow/
+ruvector.db
+supabase/seed.generated.sql
+tooltrack-*.png
 
 # Editor directories and files
 .vscode/*
