@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   Wrench,
@@ -11,8 +11,10 @@ import {
   Menu,
   X,
   HardHat,
+  LogOut,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { useAuth } from '../../hooks/useAuth'
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -24,8 +26,32 @@ const navItems = [
   { to: '/settings', icon: Settings2, label: 'Configuracion' },
 ]
 
+function getUserDisplayName(user: ReturnType<typeof useAuth>['user']): string {
+  if (!user) return 'Usuario'
+  const meta = user.user_metadata as Record<string, unknown> | undefined
+  if (typeof meta?.full_name === 'string' && meta.full_name.trim()) return meta.full_name
+  if (user.email) return user.email
+  return 'Usuario'
+}
+
+function getAvatarFallback(user: ReturnType<typeof useAuth>['user']): string {
+  if (!user) return 'U'
+  const email = user.email || ''
+  if (!email) return 'U'
+  return email.slice(0, 2).toUpperCase()
+}
+
 export function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+  const displayName = getUserDisplayName(user)
+  const avatarFallback = getAvatarFallback(user)
+
+  async function handleLogout() {
+    await signOut()
+    navigate('/login')
+  }
 
   return (
     <>
@@ -86,14 +112,23 @@ export function Sidebar() {
         </nav>
 
         <div className="border-t border-[var(--border)] px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent)]/20 text-xs font-bold text-[var(--accent)]">
-              RD
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/20 text-xs font-bold text-[var(--accent)]">
+                {avatarFallback}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-[var(--text-primary)] truncate">{displayName}</p>
+                <p className="text-xs text-[var(--text-secondary)] truncate">{user?.email || 'Usuario'}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-[var(--text-primary)]">Raul Diaz</p>
-              <p className="text-xs text-[var(--text-secondary)]">Administrador</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer"
+              title="Cerrar sesion"
+            >
+              <LogOut size={16} />
+            </button>
           </div>
         </div>
       </aside>
