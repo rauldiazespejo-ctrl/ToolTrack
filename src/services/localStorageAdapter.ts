@@ -11,7 +11,10 @@ export class LocalStorageAdapter<T extends { id: string }> implements ApiService
 
   private load(): T[] {
     const stored = localStorage.getItem(this.key);
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored) as T[];
+      return parsed;
+    }
     localStorage.setItem(this.key, JSON.stringify(this.seed));
     return this.seed;
   }
@@ -20,37 +23,38 @@ export class LocalStorageAdapter<T extends { id: string }> implements ApiService
     localStorage.setItem(this.key, JSON.stringify(items));
   }
 
-  async getAll(): Promise<T[]> {
-    return this.load();
+  getAll(): Promise<T[]> {
+    return Promise.resolve(this.load());
   }
 
-  async getById(id: string): Promise<T | null> {
-    return this.load().find((item) => item.id === id) ?? null;
+  getById(id: string): Promise<T | null> {
+    return Promise.resolve(this.load().find((item) => item.id === id) ?? null);
   }
 
-  async create(data: Omit<T, 'id'>): Promise<T> {
+  create(data: Omit<T, 'id'>): Promise<T> {
     const items = this.load();
-    const newItem = { ...(data as unknown as Record<string, unknown>), id: crypto.randomUUID() } as T;
+    const newItem = { ...data, id: crypto.randomUUID() } as T;
     const updated = [...items, newItem];
     this.save(updated);
-    return newItem;
+    return Promise.resolve(newItem);
   }
 
-  async update(id: string, data: Partial<T>): Promise<T> {
+  update(id: string, data: Partial<T>): Promise<T> {
     const items = this.load();
     const index = items.findIndex((item) => item.id === id);
     if (index === -1) {
       throw new Error(`Item with id ${id} not found`);
     }
-    const updated = { ...items[index], ...data } as T;
+    const updated = { ...items[index], ...data };
     const newItems = [...items.slice(0, index), updated, ...items.slice(index + 1)];
     this.save(newItems);
-    return updated;
+    return Promise.resolve(updated);
   }
 
-  async remove(id: string): Promise<void> {
+  remove(id: string): Promise<void> {
     const items = this.load();
     const updated = items.filter((item) => item.id !== id);
     this.save(updated);
+    return Promise.resolve();
   }
 }

@@ -14,7 +14,7 @@ export function useMaintenance() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    adapter.getAll().then(setOrders)
+    void adapter.getAll().then(setOrders)
   }, [])
 
   const refresh = useCallback(async () => {

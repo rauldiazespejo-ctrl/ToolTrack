@@ -13,7 +13,7 @@ export function useActivityLog() {
   })
 
   useEffect(() => {
-    adapter.getAll().then(setLogs)
+    void adapter.getAll().then(setLogs)
   }, [])
 
   const refresh = useCallback(async () => {
@@ -25,7 +25,7 @@ export function useActivityLog() {
     const entry = await adapter.create({
       ...data,
       created_at: new Date().toISOString(),
-    } as Omit<ActivityLog, 'id'>)
+    })
     setLogs(prev => [entry, ...prev])
     return entry
   }, [])

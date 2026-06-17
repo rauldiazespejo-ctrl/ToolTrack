@@ -14,7 +14,7 @@ export function useInventory() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    adapter.getAll().then(setInventory)
+    void adapter.getAll().then(setInventory)
   }, [])
 
   const refresh = useCallback(async () => {

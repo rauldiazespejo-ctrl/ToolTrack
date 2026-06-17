@@ -86,15 +86,15 @@ export function MaintenancePage() {
 
   function handleSave() {
     if (editingOrder) {
-      update(editingOrder.id, form)
+      void update(editingOrder.id, form)
     } else {
-      create(form)
+      void create(form)
     }
     setShowModal(false)
   }
 
   function handleComplete(id: string) {
-    complete(id)
+    void complete(id)
   }
 
   const columns: { key: MaintenanceOrder['status']; label: string; color: string }[] = [
@@ -218,14 +218,14 @@ export function MaintenancePage() {
                 <TableCell>
                   <div className="flex items-center gap-1">
                     {order.status !== 'completado' && (
-                      <button onClick={() => handleComplete(order.id)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
+                      <button onClick={() => { void handleComplete(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
                         <CheckCircle2 size={16} />
                       </button>
                     )}
                     <button onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
                       <Wrench size={16} />
                     </button>
-                    <button onClick={() => remove(order.id)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { void remove(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
                       <AlertTriangle size={16} />
                     </button>
                   </div>

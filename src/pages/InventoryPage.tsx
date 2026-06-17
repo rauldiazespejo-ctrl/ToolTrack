@@ -120,9 +120,9 @@ export function InventoryPage() {
 
   function handleSave() {
     if (editingItem) {
-      update(editingItem.id, form)
+      void update(editingItem.id, form)
     } else {
-      create(form)
+      void create(form)
     }
     setShowCreateModal(false)
   }
@@ -130,7 +130,7 @@ export function InventoryPage() {
   function handleAdjust() {
     if (!adjustItem) return
     const delta = adjustDirection === 'in' ? adjustAmount : -adjustAmount
-    adjustStock(adjustItem.id, delta, adjustReason)
+    void adjustStock(adjustItem.id, delta, adjustReason)
     setShowAdjustModal(false)
   }
 
@@ -232,7 +232,7 @@ export function InventoryPage() {
                     <button onClick={() => openEdit(item)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => remove(item.id)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { void remove(item.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
                       <Trash2 size={16} />
                     </button>
                   </div>

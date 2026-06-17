@@ -9,59 +9,59 @@ export class SupabaseAdapter<T extends { id: string }> implements ApiService<T> 
   }
 
   async getAll(): Promise<T[]> {
-    const { data, error } = await supabase.from(this.tableName).select('*');
-    if (error) {
-      console.error('Supabase getAll error:', error);
+    const result = await supabase.from(this.tableName).select('*');
+    if (result.error) {
+      console.error('Supabase getAll error:', result.error);
       return [];
     }
-    return (data as T[]) ?? [];
+    return (result.data as T[]) ?? [];
   }
 
   async getById(id: string): Promise<T | null> {
-    const { data, error } = await supabase
+    const result = await supabase
       .from(this.tableName)
       .select('*')
       .eq('id', id)
       .single();
-    if (error) {
-      console.error('Supabase getById error:', error);
+    if (result.error) {
+      console.error('Supabase getById error:', result.error);
       return null;
     }
-    return (data as T) ?? null;
+    return (result.data as T) ?? null;
   }
 
   async create(data: Omit<T, 'id'>): Promise<T> {
-    const { data: result, error } = await supabase
+    const result = await supabase
       .from(this.tableName)
       .insert(data as unknown as Record<string, unknown>)
       .select()
       .single();
-    if (error) {
-      console.error('Supabase create error:', error);
-      throw error;
+    if (result.error) {
+      console.error('Supabase create error:', result.error);
+      throw result.error;
     }
-    return result as T;
+    return result.data as T;
   }
 
   async update(id: string, data: Partial<T>): Promise<T> {
-    const { data: result, error } = await supabase
+    const result = await supabase
       .from(this.tableName)
       .update(data as unknown as Record<string, unknown>)
       .eq('id', id)
       .select()
       .single();
-    if (error) {
-      console.error('Supabase update error:', error);
-      throw error;
+    if (result.error) {
+      console.error('Supabase update error:', result.error);
+      throw result.error;
     }
-    return result as T;
+    return result.data as T;
   }
 
   async remove(id: string): Promise<void> {
-    const { error } = await supabase.from(this.tableName).delete().eq('id', id);
-    if (error) {
-      console.error('Supabase remove error:', error);
-      throw error;
+    const result = await supabase.from(this.tableName).delete().eq('id', id);
+    if (result.error) {
+      console.error('Supabase remove error:', result.error);
+      throw result.error;
     }
   }
 }

@@ -50,7 +50,7 @@ export function Sidebar() {
 
   async function handleLogout() {
     await signOut()
-    navigate('/login')
+    void navigate('/login')
   }
 
   return (
@@ -123,7 +123,7 @@ export function Sidebar() {
               </div>
             </div>
             <button
-              onClick={handleLogout}
+              onClick={() => { void handleLogout(); }}
               className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer"
               title="Cerrar sesion"
             >

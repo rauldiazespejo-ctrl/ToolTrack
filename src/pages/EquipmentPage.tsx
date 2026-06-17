@@ -172,15 +172,15 @@ export function EquipmentPage() {
     }
 
     if (editingId) {
-      update(editingId, data)
+      void update(editingId, data)
     } else {
-      create(data)
+      void create(data)
     }
     setModalOpen(false)
   }
 
   function handleDelete(id: string) {
-    remove(id)
+    void remove(id)
     setDeleteConfirm(null)
   }
 

@@ -45,7 +45,7 @@ function createMockUser(email: string): User {
     user_metadata: { full_name: email.split('@')[0] },
     aud: 'authenticated',
     created_at: new Date().toISOString(),
-  } as User
+  }
 }
 
 function getInitialState(): AuthState {
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
     }
 
-    initSession()
+    void initSession()
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return

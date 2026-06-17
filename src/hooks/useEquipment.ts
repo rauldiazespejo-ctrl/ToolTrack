@@ -14,7 +14,7 @@ export function useEquipment() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    adapter.getAll().then(setEquipment)
+    void adapter.getAll().then(setEquipment)
   }, [])
 
   const refresh = useCallback(async () => {
@@ -34,7 +34,7 @@ export function useEquipment() {
     } as Omit<Equipment, 'id'>)
     const withQr = await adapter.update(created.id, {
       qr_code: `SOLDESP-${created.id.toUpperCase()}`,
-    } as Partial<Equipment>)
+    })
     setEquipment(prev => [...prev, withQr])
     setLoading(false)
     return withQr

@@ -13,7 +13,7 @@ export function useAlerts() {
   })
 
   useEffect(() => {
-    adapter.getAll().then(setAlerts)
+    void adapter.getAll().then(setAlerts)
   }, [])
 
   const refresh = useCallback(async () => {
