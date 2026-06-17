@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "check:prod": "node scripts/check-production-env.mjs --strict",
     "lint": "eslint .",
     "preview": "vite preview",
+    "supabase:seed": "python3 scripts/generate-supabase-seed.py \"/Users/rauldiazespejogmail.com/Downloads/INVENTARIO GENERAL ACTUALIZADO.xlsx\" supabase/seed.generated.sql",
     "test": "vitest run"
   },
   "dependencies": {

@@ -29,6 +29,7 @@ npm run dev
 npm run lint
 npm run test
 npm run build
+npm run check:prod
 npm run preview
 ```
 
@@ -38,6 +39,12 @@ Regenerate the app inventory JSON from the real Excel file:
 python3 scripts/generate-inventory-json.py \
   "/Users/rauldiazespejogmail.com/Downloads/INVENTARIO GENERAL ACTUALIZADO.xlsx" \
   src/data/inventory.generated.json
+```
+
+Generate a Supabase SQL seed from the real Excel workbook:
+
+```bash
+npm run supabase:seed
 ```
 
 ## Environment
@@ -75,8 +82,10 @@ Without those variables, QR scan events are stored in browser `localStorage`.
 ## Production Backend
 
 `supabase/schema.sql` contains the first production schema for imports, inventory
-items, movements, and QR scan events. The frontend still uses generated JSON
-until Supabase credentials and import workflows are configured. QR scan actions
-currently persist in `localStorage` with the same shape planned for
-`qr_scan_events`; when Supabase env vars are present, the app writes scan events
-to Supabase and associates them with the authenticated user.
+items, movements, and QR scan events. `scripts/generate-supabase-seed.py`
+generates a SQL import from the real Excel workbook for Supabase. The current
+frontend still reads inventory from generated JSON for fast static loading, while
+QR scan actions persist in `localStorage` without Supabase and write to
+`qr_scan_events` when browser-safe Supabase env vars are present.
+
+For the full release checklist, see `docs/production-checklist.md`.
