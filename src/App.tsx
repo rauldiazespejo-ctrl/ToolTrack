@@ -6,6 +6,10 @@ import { DashboardPage } from './pages/DashboardPage'
 import { EquipmentPage } from './pages/EquipmentPage'
 import { EquipmentDetailPage } from './pages/EquipmentDetailPage'
 import { InventoryPage } from './pages/InventoryPage'
+import { RequestsPage } from './pages/RequestsPage'
+import { WarehousePage } from './pages/WarehousePage'
+import { CompliancePage } from './pages/CompliancePage'
+import { EventsPage } from './pages/EventsPage'
 import { MaintenancePage } from './pages/MaintenancePage'
 import { AlertsPage } from './pages/AlertsPage'
 import { MapPage } from './pages/MapPage'
@@ -23,6 +27,10 @@ export default function App() {
             <Route path="equipment" element={<EquipmentPage />} />
             <Route path="equipment/:id" element={<EquipmentDetailPage />} />
             <Route path="inventory" element={<InventoryPage />} />
+            <Route path="requests" element={<RequestsPage />} />
+            <Route path="warehouse" element={<WarehousePage />} />
+            <Route path="compliance" element={<CompliancePage />} />
+            <Route path="events" element={<EventsPage />} />
             <Route path="maintenance" element={<MaintenancePage />} />
             <Route path="alerts" element={<AlertsPage />} />
             <Route path="map" element={<MapPage />} />

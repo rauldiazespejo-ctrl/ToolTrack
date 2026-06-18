@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Package, Plus, Edit2, Trash2, ArrowUpCircle, ArrowDownCircle, DollarSign, AlertTriangle } from 'lucide-react'
-import { toast } from 'sonner'
+import { toast } from '../lib/toast'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'

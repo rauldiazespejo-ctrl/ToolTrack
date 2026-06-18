@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Search, Bell } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useAlerts } from '../../hooks/useAlerts'
+import { useNotifications } from '../../hooks/useNotifications'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useSearch } from '../../hooks/useSearch'
 
@@ -10,6 +11,10 @@ const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/equipment': 'Equipos',
   '/inventory': 'Inventario',
+  '/requests': 'Solicitudes',
+  '/warehouse': 'Bodega',
+  '/compliance': 'Cumplimiento',
+  '/events': 'Eventos',
   '/maintenance': 'Mantenimiento',
   '/alerts': 'Alertas',
   '/map': 'Mapa de Sitios',
@@ -33,6 +38,7 @@ export function Header() {
   const title = getPageTitle(location.pathname)
   const { user } = useAuth()
   const { unreadCount } = useAlerts()
+  const { unreadCount: notificationUnreadCount } = useNotifications()
   const avatarFallback = getAvatarFallback(user)
 
   const [inputValue, setInputValue] = useState('')
@@ -63,9 +69,9 @@ export function Header() {
 
         <button className="relative rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors cursor-pointer">
           <Bell size={20} />
-          {unreadCount > 0 && (
+          {unreadCount + notificationUnreadCount > 0 && (
             <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--danger)] text-[10px] font-bold text-white">
-              {unreadCount > 9 ? '9+' : unreadCount}
+              {unreadCount + notificationUnreadCount > 9 ? '9+' : unreadCount + notificationUnreadCount}
             </span>
           )}
         </button>

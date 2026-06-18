@@ -1,4 +1,17 @@
-import type { Equipment, InventoryItem, MaintenanceOrder, Alert, ActivityLog } from '../lib/supabase'
+import type {
+  Equipment,
+  InventoryItem,
+  MaintenanceOrder,
+  Alert,
+  ActivityLog,
+  AssetRequest,
+  QuoteRequest,
+  Dispatch,
+  DispatchItem,
+  ComplianceDocument,
+  QrScanEvent,
+  Notification,
+} from '../lib/supabase'
 
 export const seedEquipment: Equipment[] = [
   {
@@ -537,3 +550,11 @@ export const sites = [
   { name: 'Proyecto Los Bronces', lat: -33.1500, lng: -70.2833, equipmentCount: 4 },
   { name: 'Bodega Quilicura', lat: -33.3550, lng: -70.7350, equipmentCount: 3 },
 ]
+
+export const seedAssetRequests: AssetRequest[] = []
+export const seedQuoteRequests: QuoteRequest[] = []
+export const seedDispatches: Dispatch[] = []
+export const seedDispatchItems: DispatchItem[] = []
+export const seedComplianceDocuments: ComplianceDocument[] = []
+export const seedQrScanEvents: QrScanEvent[] = []
+export const seedNotifications: Notification[] = []

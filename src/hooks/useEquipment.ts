@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import type { Equipment } from '../lib/supabase'
 import { seedEquipment } from '../data/seed'
 import { createAdapter } from '../services'
+import { buildEquipmentQrValue } from '../lib/tooltrack'
 
 const adapter = createAdapter<Equipment>('tooltrack_equipment', 'equipment', seedEquipment)
 
@@ -33,7 +34,7 @@ export function useEquipment() {
       updated_at: now,
     } as Omit<Equipment, 'id'>)
     const withQr = await adapter.update(created.id, {
-      qr_code: `SOLDESP-${created.id.toUpperCase()}`,
+      qr_code: buildEquipmentQrValue(created.id),
     })
     setEquipment(prev => [...prev, withQr])
     setLoading(false)

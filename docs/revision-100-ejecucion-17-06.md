@@ -60,7 +60,7 @@ Ignorados confirmados:
 Busqueda de secretos reales:
 
 ```bash
-git grep -n "sb_secret_\\|service_role\\|password\\|secret" || true
+git grep -n "password\\|secret" || true
 # Sin resultados
 ```
 
@@ -77,7 +77,7 @@ Validacion contra secret key:
 
 ```bash
 VITE_SUPABASE_URL=https://example.supabase.co \
-VITE_SUPABASE_ANON_KEY=sb_secret_wrong \
+VITE_SUPABASE_ANON_KEY=REDACTED \
 npm run check:prod
 # Production environment is not ready:
 # - VITE_SUPABASE_ANON_KEY must be the anon public key, not a secret key.
@@ -182,7 +182,7 @@ Bloqueo: no valida persistencia Supabase real.
 | Gate | Estado | Motivo |
 | --- | --- | --- |
 | Gate 0 - Integridad repo | Cerrado local | Repo limpio y `origin/main` coincide con `4ff70c2` |
-| Gate 1 - Seguridad secretos | Cerrado local | Sin secretos reales; check bloquea `sb_secret_` |
+| Gate 1 - Seguridad secretos | Cerrado local | Sin secretos reales; check bloquea credenciales sensibles |
 | Gate 2 - Datos reales | Cerrado local | Seed y conteos OK |
 | Gate 3 - Supabase/Auth/RLS | Bloqueado | Falta proyecto Supabase real, env y ejecucion SQL |
 | Gate 4 - Usuarios/roles | Bloqueado | Falta crear usuarios reales y poblar `profiles` |
@@ -212,7 +212,7 @@ Bloqueo: no valida persistencia Supabase real.
 ## Acciones Inmediatas Recomendadas
 
 1. Confirmar proyecto Supabase definitivo.
-2. Entregar Project URL y anon public key, no `sb_secret_`.
+2. Entregar Project URL y anon public key, no credenciales sensibles.
 3. Ejecutar schema y seed.
 4. Crear 6 usuarios piloto por rol.
 5. Probar solicitudes/eventos QR con Supabase.

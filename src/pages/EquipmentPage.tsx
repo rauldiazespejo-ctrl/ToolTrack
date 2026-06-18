@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Search, Pencil, Trash2, Package, Truck, HardHat, ShieldCheck } from 'lucide-react'
-import { toast } from 'sonner'
+import { toast } from '../lib/toast'
 import { useEquipment } from '../hooks/useEquipment'
 import { useSearch } from '../hooks/useSearch'
 import { Card } from '../components/ui/Card'
@@ -402,4 +402,3 @@ export function EquipmentPage() {
     </div>
   )
 }
-

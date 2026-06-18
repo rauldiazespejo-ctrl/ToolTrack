@@ -42,7 +42,7 @@ function createMockUser(email: string): User {
     id: 'dev-user-id',
     email,
     app_metadata: {},
-    user_metadata: { full_name: email.split('@')[0] },
+    user_metadata: { full_name: email.split('@')[0], role: 'administrador' },
     aud: 'authenticated',
     created_at: new Date().toISOString(),
   }

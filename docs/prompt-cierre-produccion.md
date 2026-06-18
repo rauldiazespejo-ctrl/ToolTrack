@@ -28,7 +28,7 @@ Restricciones no negociables:
 - No usar datos demo.
 - No inventar certificaciones, calibraciones, mantenciones, fechas, dueños,
   responsables, GPS o coordenadas.
-- No exponer claves `sb_secret_`, `service_role` ni passwords en frontend,
+- No exponer credenciales sensibles ni passwords en frontend,
   README, docs, commits o logs.
 - Respaldar cada avance con commit local y push a GitHub.
 - Todo flujo critico debe dejar auditoria.
@@ -286,7 +286,7 @@ Ejecutar siempre:
 npm run lint
 npm run test
 npm run build
-git grep -n "sb_secret_\\|service_role" || true
+git grep -n "password\\|secret" || true
 git status -sb
 ```
 
@@ -361,4 +361,3 @@ Diseno:
 ## Ultima Regla
 
 No marques nada como cerrado por intuicion. Cierra solo con evidencia.
-

@@ -4,8 +4,11 @@ import { MemoryRouter } from 'react-router-dom'
 import { DashboardPage } from '../pages/DashboardPage'
 
 vi.mock('chart.js', () => {
-  const Chart = vi.fn(() => ({ destroy: vi.fn() }))
-  Object.assign(Chart, { register: vi.fn() })
+  class Chart {
+    destroy = vi.fn()
+    static register = vi.fn()
+    constructor() {}
+  }
   return {
     Chart,
     DoughnutController: class {},
@@ -49,6 +52,24 @@ vi.mock('../hooks/useAlerts', () => ({
 vi.mock('../hooks/useActivityLog', () => ({
   useActivityLog: () => ({
     recentLogs: [],
+  }),
+}))
+
+vi.mock('../hooks/useRequests', () => ({
+  useRequests: () => ({
+    stats: { total: 0, pendingApproval: 0, approved: 0, warehouseQueue: 0, readyToDispatch: 0, dispatched: 0, closed: 0, quoteRequired: 0, rejected: 0 },
+  }),
+}))
+
+vi.mock('../hooks/useCompliance', () => ({
+  useCompliance: () => ({
+    stats: { total: 0, vigente: 0, vencePronto: 0, vencido: 0, ausente: 0 },
+  }),
+}))
+
+vi.mock('../hooks/useNotifications', () => ({
+  useNotifications: () => ({
+    unreadCount: 0,
   }),
 }))
 

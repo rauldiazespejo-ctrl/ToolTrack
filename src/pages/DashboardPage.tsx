@@ -9,6 +9,9 @@ import { useInventory } from '../hooks/useInventory'
 import { useMaintenance } from '../hooks/useMaintenance'
 import { useAlerts } from '../hooks/useAlerts'
 import { useActivityLog } from '../hooks/useActivityLog'
+import { useRequests } from '../hooks/useRequests'
+import { useCompliance } from '../hooks/useCompliance'
+import { useNotifications } from '../hooks/useNotifications'
 import { formatCurrency, formatDate, getSeverityColor } from '../lib/utils'
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend, BarController, BarElement, CategoryScale, LinearScale)
@@ -33,6 +36,9 @@ export function DashboardPage() {
   const { stats: mtStats } = useMaintenance()
   const { alerts, unreadCount } = useAlerts()
   const { recentLogs } = useActivityLog()
+  const { stats: requestStats } = useRequests()
+  const { stats: complianceStats } = useCompliance()
+  const { unreadCount: notificationUnreadCount } = useNotifications()
 
   const doughnutRef = useRef<HTMLCanvasElement>(null)
   const barRef = useRef<HTMLCanvasElement>(null)
@@ -113,9 +119,11 @@ export function DashboardPage() {
         <StatCard icon={<Wrench size={20} />} label="Total Equipos" value={eqStats.total} />
         <StatCard icon={<TrendingUp size={20} />} label="En Uso" value={eqStats.en_uso} trend={{ direction: 'up', percentage: Math.round((eqStats.en_uso / Math.max(eqStats.total, 1)) * 100) }} />
         <StatCard icon={<Settings size={20} />} label="En Mantención" value={eqStats.mantenimiento + mtStats.vencido} />
-        <StatCard icon={<AlertTriangle size={20} />} label="Alertas Activas" value={unreadCount} trend={unreadCount > 3 ? { direction: 'up', percentage: unreadCount } : undefined} />
+        <StatCard icon={<AlertTriangle size={20} />} label="Alertas Activas" value={unreadCount + notificationUnreadCount} trend={unreadCount + notificationUnreadCount > 3 ? { direction: 'up', percentage: unreadCount + notificationUnreadCount } : undefined} />
         <StatCard icon={<Package size={20} />} label="Stock Bajo" value={invStats.lowStock} />
         <StatCard icon={<DollarSign size={20} />} label="Valor Activos" value={formatCurrency(eqStats.valorTotal)} />
+        <StatCard icon={<ArrowRight size={20} />} label="Solicitudes" value={requestStats.total} />
+        <StatCard icon={<Clock size={20} />} label="Docs vence pronto" value={complianceStats.vencePronto} />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
