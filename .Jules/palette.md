@@ -1,0 +1,3 @@
+## 2026-06-20 - [Add aria-labels to core icon-only layout buttons]
+**Learning:** Found multiple critical navigational icon-only buttons (like mobile menu toggle, search inputs, modal closes, and header notifications) missing `aria-label`s. Because these are heavily used layout components, lack of accessible naming severely impacts screen reader users trying to navigate the app's basic structure. Adding `aria-label` immediately solves this across the app.
+**Action:** Always verify that layout-level interactive elements (Header/Sidebar/Modal) include `aria-label` or visible labels, especially when they just use an icon.
