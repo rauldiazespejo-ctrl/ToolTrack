@@ -66,6 +66,7 @@ export function Sidebar() {
       <button
         onClick={() => setMobileOpen(true)}
         className="fixed top-4 left-4 z-50 rounded-lg bg-[var(--bg-card)] p-2 text-[var(--text-secondary)] lg:hidden cursor-pointer border border-[var(--border)]"
+        aria-label="Abrir menú de navegación"
       >
         <Menu size={20} />
       </button>
@@ -94,6 +95,7 @@ export function Sidebar() {
           <button
             onClick={() => setMobileOpen(false)}
             className="rounded-lg p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer"
+            aria-label="Cerrar menú de navegación"
           >
             <X size={18} />
           </button>
@@ -134,6 +136,7 @@ export function Sidebar() {
               onClick={() => { void handleLogout(); }}
               className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer"
               title="Cerrar sesion"
+              aria-label="Cerrar sesión"
             >
               <LogOut size={16} />
             </button>
