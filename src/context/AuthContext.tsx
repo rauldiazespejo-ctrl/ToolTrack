@@ -20,7 +20,7 @@ export interface AuthContextValue extends AuthState {
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextValue | null>(null)
 
-const isSupabaseUnavailable = !import.meta.env.VITE_SUPABASE_URL
+const isSupabaseUnavailable = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY
 
 function loadMockUser(): User | null {
   const raw = localStorage.getItem(DEV_AUTH_KEY)
@@ -75,6 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isSupabaseUnavailable) return
 
     let mounted = true
+    let stateVersion = 0
 
     async function initSession() {
       const { data, error } = await supabase.auth.getSession()
@@ -87,12 +88,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }))
         return
       }
-      setState({
-        user: data.session?.user ?? null,
-        session: data.session ?? null,
-        isLoading: false,
-        isAuthenticated: !!data.session?.user,
-        isMockMode: false,
+      const version = ++stateVersion
+      setState(current => {
+        if (version < stateVersion) return current
+        return {
+          user: data.session?.user ?? null,
+          session: data.session ?? null,
+          isLoading: false,
+          isAuthenticated: !!data.session?.user,
+          isMockMode: false,
+        }
       })
     }
 
@@ -100,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
+      ++stateVersion
       setState({
         user: session?.user ?? null,
         session: session ?? null,

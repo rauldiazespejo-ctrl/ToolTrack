@@ -10,17 +10,28 @@ export class LocalStorageAdapter<T extends { id: string }> implements ApiService
   }
 
   private load(): T[] {
-    const stored = localStorage.getItem(this.key);
-    if (stored) {
-      const parsed = JSON.parse(stored) as T[];
-      return parsed;
+    try {
+      const stored = localStorage.getItem(this.key);
+      if (stored) {
+        const parsed = JSON.parse(stored) as T[];
+        return parsed;
+      }
+      localStorage.setItem(this.key, JSON.stringify(this.seed));
+      return this.seed;
+    } catch {
+      console.error(`[LocalStorageAdapter] Error al leer ${this.key}. Usando seed.`);
+      localStorage.setItem(this.key, JSON.stringify(this.seed));
+      return this.seed;
     }
-    localStorage.setItem(this.key, JSON.stringify(this.seed));
-    return this.seed;
   }
 
   private save(items: T[]): void {
-    localStorage.setItem(this.key, JSON.stringify(items));
+    try {
+      localStorage.setItem(this.key, JSON.stringify(items));
+    } catch (e) {
+      console.error(`[LocalStorageAdapter] Error al guardar ${this.key}:`, e);
+      throw e;
+    }
   }
 
   getAll(): Promise<T[]> {
@@ -33,7 +44,10 @@ export class LocalStorageAdapter<T extends { id: string }> implements ApiService
 
   create(data: Omit<T, 'id'>): Promise<T> {
     const items = this.load();
-    const newItem = { ...data, id: crypto.randomUUID() } as T;
+    const id = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const newItem = { ...data, id } as T;
     const updated = [...items, newItem];
     this.save(updated);
     return Promise.resolve(newItem);

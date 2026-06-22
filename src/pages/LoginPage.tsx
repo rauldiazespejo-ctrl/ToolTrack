@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HardHat, LogIn } from 'lucide-react'
 import { Button } from '../components/ui/Button'
@@ -14,9 +14,11 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
 
-  if (isAuthenticated) {
-    navigate('/', { replace: true })
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true })
+    }
+  }, [isAuthenticated, navigate])
 
   function validate(): boolean {
     const errors: { email?: string; password?: string } = {}
@@ -37,13 +39,18 @@ export function LoginPage() {
     setError(null)
     if (!validate()) return
     setIsSubmitting(true)
-    const { error: signInError } = await signIn(email.trim(), password)
-    setIsSubmitting(false)
-    if (signInError) {
-      setError(signInError.message || 'Error al iniciar sesion')
-      return
+    try {
+      const { error: signInError } = await signIn(email.trim(), password)
+      if (signInError) {
+        setError(signInError.message || 'Error al iniciar sesion')
+        return
+      }
+      navigate('/')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error inesperado al iniciar sesion')
+    } finally {
+      setIsSubmitting(false)
     }
-    navigate('/')
   }
 
   return (

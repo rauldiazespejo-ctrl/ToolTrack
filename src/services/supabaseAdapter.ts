@@ -40,6 +40,9 @@ export class SupabaseAdapter<T extends { id: string }> implements ApiService<T> 
       console.error('Supabase create error:', result.error);
       throw result.error;
     }
+    if (!result.data) {
+      throw new Error('Supabase insert returned no data');
+    }
     return result.data as T;
   }
 
@@ -53,6 +56,9 @@ export class SupabaseAdapter<T extends { id: string }> implements ApiService<T> 
     if (result.error) {
       console.error('Supabase update error:', result.error);
       throw result.error;
+    }
+    if (!result.data) {
+      throw new Error('Supabase update returned no data');
     }
     return result.data as T;
   }

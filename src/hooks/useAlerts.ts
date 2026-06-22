@@ -7,13 +7,21 @@ const adapter = createAdapter<Alert>('tooltrack_alerts', 'alerts', seedAlerts)
 
 export function useAlerts() {
   const [alerts, setAlerts] = useState<Alert[]>(() => {
-    const stored = localStorage.getItem('tooltrack_alerts')
-    if (stored) return JSON.parse(stored)
+    try {
+      const stored = localStorage.getItem('tooltrack_alerts')
+      if (stored) return JSON.parse(stored)
+    } catch {
+      console.error('[useAlerts] Error parsing localStorage, using seed.')
+    }
     return seedAlerts
   })
 
   useEffect(() => {
-    void adapter.getAll().then(setAlerts)
+    let mounted = true
+    void adapter.getAll().then(items => {
+      if (mounted) setAlerts(items)
+    })
+    return () => { mounted = false }
   }, [])
 
   const refresh = useCallback(async () => {
@@ -22,19 +30,31 @@ export function useAlerts() {
   }, [])
 
   const markRead = useCallback(async (id: string) => {
-    const updated = await adapter.update(id, { is_read: true })
-    setAlerts(prev => prev.map(item => item.id === id ? updated : item))
+    try {
+      const updated = await adapter.update(id, { is_read: true })
+      setAlerts(prev => prev.map(item => item.id === id ? updated : item))
+    } catch (e) {
+      console.error('[useAlerts] markRead error:', e)
+    }
   }, [])
 
   const markAllRead = useCallback(async () => {
-    const items = await adapter.getAll()
-    await Promise.all(items.map(item => adapter.update(item.id, { is_read: true })))
-    setAlerts(prev => prev.map(item => ({ ...item, is_read: true })))
+    try {
+      const items = await adapter.getAll()
+      await Promise.all(items.map(item => adapter.update(item.id, { is_read: true })))
+      setAlerts(prev => prev.map(item => ({ ...item, is_read: true })))
+    } catch (e) {
+      console.error('[useAlerts] markAllRead error:', e)
+    }
   }, [])
 
   const dismiss = useCallback(async (id: string) => {
-    await adapter.remove(id)
-    setAlerts(prev => prev.filter(item => item.id !== id))
+    try {
+      await adapter.remove(id)
+      setAlerts(prev => prev.filter(item => item.id !== id))
+    } catch (e) {
+      console.error('[useAlerts] dismiss error:', e)
+    }
   }, [])
 
   const unreadCount = alerts.filter(a => !a.is_read).length

@@ -7,13 +7,21 @@ const adapter = createAdapter<ActivityLog>('tooltrack_activity_log', 'activity_l
 
 export function useActivityLog() {
   const [logs, setLogs] = useState<ActivityLog[]>(() => {
-    const stored = localStorage.getItem('tooltrack_activity_log')
-    if (stored) return JSON.parse(stored)
+    try {
+      const stored = localStorage.getItem('tooltrack_activity_log')
+      if (stored) return JSON.parse(stored)
+    } catch {
+      console.error('[useActivityLog] Error parsing localStorage, using seed.')
+    }
     return seedActivityLog
   })
 
   useEffect(() => {
-    void adapter.getAll().then(setLogs)
+    let mounted = true
+    void adapter.getAll().then(items => {
+      if (mounted) setLogs(items)
+    })
+    return () => { mounted = false }
   }, [])
 
   const refresh = useCallback(async () => {
@@ -22,12 +30,17 @@ export function useActivityLog() {
   }, [])
 
   const addEntry = useCallback(async (data: Omit<ActivityLog, 'id' | 'created_at'>) => {
-    const entry = await adapter.create({
-      ...data,
-      created_at: new Date().toISOString(),
-    })
-    setLogs(prev => [entry, ...prev])
-    return entry
+    try {
+      const entry = await adapter.create({
+        ...data,
+        created_at: new Date().toISOString(),
+      })
+      setLogs(prev => [entry, ...prev])
+      return entry
+    } catch (e) {
+      console.error('[useActivityLog] addEntry error:', e)
+      throw e
+    }
   }, [])
 
   const recentLogs = logs.slice(0, 10)
