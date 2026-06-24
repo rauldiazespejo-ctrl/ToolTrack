@@ -1,0 +1,3 @@
+## 2026-06-24 - Screen Reader Context for Core Layout Icons
+**Learning:** Icon-only buttons used in core application shell components (like sidebars and headers) lack screen-reader context. When left as-is, screen readers announce these simply as "button", frustrating users trying to navigate the application. Adding titles is helpful for sighted users but often ignored by screen readers, so explicit aria-labels must be used.
+**Action:** Add localized `aria-label` attributes to all icon-only buttons in structural layout components (Header, Sidebar, Modal) to ensure immediate comprehension and maintain standard accessibility protocols.
