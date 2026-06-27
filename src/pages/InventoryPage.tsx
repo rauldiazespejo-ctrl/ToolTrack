@@ -253,13 +253,13 @@ export function InventoryPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => openAdjust(item)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Ajustar stock">
+                    <button onClick={() => openAdjust(item)} aria-label={`Ajustar stock de ${item.name}`} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Ajustar stock">
                       <ArrowUpCircle size={16} />
                     </button>
-                    <button onClick={() => openEdit(item)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
+                    <button onClick={() => openEdit(item)} aria-label={`Editar ${item.name}`} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Editar">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => { void handleDeleteItem(item.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { void handleDeleteItem(item.id); }} aria-label={`Eliminar ${item.name}`} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Eliminar">
                       <Trash2 size={16} />
                     </button>
                   </div>
