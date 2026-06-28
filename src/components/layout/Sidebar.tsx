@@ -57,7 +57,8 @@ export function Sidebar() {
     <>
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-[var(--bg-card)] p-2 text-[var(--text-secondary)] lg:hidden cursor-pointer border border-[var(--border)]"
+        aria-label="Abrir menú"
+        className="fixed top-4 left-4 z-50 rounded-lg bg-[var(--bg-card)] p-2 text-[var(--text-secondary)] lg:hidden cursor-pointer border border-[var(--border)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
         <Menu size={20} />
       </button>
@@ -85,7 +86,8 @@ export function Sidebar() {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
-            className="rounded-lg p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer"
+            aria-label="Cerrar menú"
+            className="rounded-lg p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
             <X size={18} />
           </button>
@@ -99,7 +101,7 @@ export function Sidebar() {
               end={item.to === '/'}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) => cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]',
                 isActive
                   ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
                   : 'text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]'
@@ -124,8 +126,9 @@ export function Sidebar() {
             </div>
             <button
               onClick={() => { void handleLogout(); }}
-              className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer"
-              title="Cerrar sesion"
+              aria-label="Cerrar sesión"
+              className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+              title="Cerrar sesión"
             >
               <LogOut size={16} />
             </button>
