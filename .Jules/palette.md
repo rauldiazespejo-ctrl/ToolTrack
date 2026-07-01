@@ -1,0 +1,3 @@
+## 2024-05-18 - Focus States & ARIA Labels on Icon Buttons
+**Learning:** The project relies heavily on icon-only buttons (like menu toggles, notifications, and modal close buttons) which consistently lacked `aria-label` attributes and visible focus states, hindering screen reader usability and keyboard navigation. The design system requires specific Tailwind utility classes for standard focus states.
+**Action:** Applied `aria-label` attributes to all identified icon-only buttons and added the standard focus utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`). Going forward, always ensure these attributes and classes are included when adding new icon buttons.
