@@ -1,0 +1,3 @@
+## 2026-07-03 - Icon-Only Button Accessibility Pattern
+**Learning:** When using custom ghost/icon buttons or native `<button>` tags within tables for actions (edit, delete, complete), the lack of text labels inherently hides their purpose from screen readers, and standard utility resets can remove default browser focus indicators, hindering keyboard navigation.
+**Action:** Always ensure icon-only buttons receive descriptive, localized (Spanish) `aria-label` attributes. In projects using Tailwind utility classes for focus management, apply the project's standard focus-visible pattern (e.g., `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to maintain robust keyboard accessibility.
