@@ -1,0 +1,3 @@
+## 2024-05-18 - Missing ARIA Labels and Keyboard Focus on Core UI
+**Learning:** Found a pattern of icon-only buttons across the core layout (Header, Sidebar, Modals) missing `aria-label` attributes and lacking visual keyboard focus states. The standard focus state convention for this project is `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`.
+**Action:** Always verify icon-only buttons have descriptive `aria-label`s (in Spanish for this project) and ensure interactive elements use the standard Tailwind focus utility classes for keyboard accessibility.
