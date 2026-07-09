@@ -257,14 +257,14 @@ export function MaintenancePage() {
                 <TableCell>
                   <div className="flex items-center gap-1">
                     {order.status !== 'completado' && (
-                      <button onClick={() => { handleCompleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
+                      <button onClick={() => { handleCompleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Completar" aria-label="Completar orden">
                         <CheckCircle2 size={16} />
                       </button>
                     )}
-                    <button onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
+                    <button onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Editar" aria-label="Editar orden">
                       <Wrench size={16} />
                     </button>
-                    <button onClick={() => { handleDeleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button onClick={() => { handleDeleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]" title="Eliminar" aria-label="Eliminar orden">
                       <AlertTriangle size={16} />
                     </button>
                   </div>
