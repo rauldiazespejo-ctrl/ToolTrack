@@ -1,0 +1,3 @@
+## 2024-05-24 - Layout Navigation Accessibility
+**Learning:** Icon-only navigation and layout buttons (e.g., sidebar menu toggle, notifications, logout) often lack critical `aria-label` attributes and visible focus states out of the box in custom UI components. This limits keyboard accessibility and screen reader support.
+**Action:** Always verify icon-only interactive elements in layout structures possess descriptive Spanish `aria-label` attributes and apply standard focus ring utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
