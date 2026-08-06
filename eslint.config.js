@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'api/**']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -41,6 +41,16 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
+  {
+    files: ['src/__tests__/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
 ])

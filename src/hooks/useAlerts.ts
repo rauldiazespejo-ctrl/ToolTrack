@@ -6,15 +6,7 @@ import { createAdapter } from '../services'
 const adapter = createAdapter<Alert>('tooltrack_alerts', 'alerts', seedAlerts)
 
 export function useAlerts() {
-  const [alerts, setAlerts] = useState<Alert[]>(() => {
-    try {
-      const stored = localStorage.getItem('tooltrack_alerts')
-      if (stored) return JSON.parse(stored)
-    } catch {
-      console.error('[useAlerts] Error parsing localStorage, using seed.')
-    }
-    return seedAlerts
-  })
+  const [alerts, setAlerts] = useState<Alert[]>(seedAlerts)
 
   useEffect(() => {
     let mounted = true

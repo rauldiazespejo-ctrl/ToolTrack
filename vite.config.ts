@@ -3,9 +3,13 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig({
-  base: '/ToolTrack/',
-  plugins: [
+export default defineConfig(() => {
+  const isVercel = Boolean(process.env.VERCEL)
+  const base = isVercel ? '/' : '/ToolTrack/'
+
+  return {
+    base,
+    plugins: [
     react(),
     tailwindcss(),
     VitePWA({
@@ -18,5 +22,6 @@ export default defineConfig({
         display: 'standalone',
       },
     }),
-  ],
+    ],
+  }
 })

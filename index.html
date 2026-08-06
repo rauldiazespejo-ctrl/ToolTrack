@@ -12,12 +12,14 @@
   <body>
     <div id="root"></div>
     <script type="text/javascript">
-      // SPA redirect handler for GitHub Pages
+      // SPA redirect handler for GitHub Pages (only when served under /ToolTrack/)
       var redirect = sessionStorage.getItem('spa-redirect');
-      if (redirect) {
+      var ghBase = '/ToolTrack/';
+      if (redirect && window.location.pathname.startsWith(ghBase)) {
         sessionStorage.removeItem('spa-redirect');
-        if (redirect !== window.location.pathname.replace('/ToolTrack/', '')) {
-          window.history.replaceState(null, null, '/ToolTrack/' + redirect);
+        var currentPath = window.location.pathname.replace(ghBase, '');
+        if (redirect !== currentPath) {
+          window.history.replaceState(null, null, ghBase + redirect);
         }
       }
     </script>

@@ -6,15 +6,7 @@ import { createAdapter } from '../services'
 const adapter = createAdapter<Equipment>('tooltrack_equipment', 'equipment', seedEquipment)
 
 export function useEquipment() {
-  const [equipment, setEquipment] = useState<Equipment[]>(() => {
-    try {
-      const stored = localStorage.getItem('tooltrack_equipment')
-      if (stored) return JSON.parse(stored)
-    } catch {
-      console.error('[useEquipment] Error parsing localStorage, using seed.')
-    }
-    return seedEquipment
-  })
+  const [equipment, setEquipment] = useState<Equipment[]>(seedEquipment)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {

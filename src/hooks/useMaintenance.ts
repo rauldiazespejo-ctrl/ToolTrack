@@ -6,15 +6,7 @@ import { createAdapter } from '../services'
 const adapter = createAdapter<MaintenanceOrder>('tooltrack_maintenance', 'maintenance_orders', seedMaintenance)
 
 export function useMaintenance() {
-  const [orders, setOrders] = useState<MaintenanceOrder[]>(() => {
-    try {
-      const stored = localStorage.getItem('tooltrack_maintenance')
-      if (stored) return JSON.parse(stored)
-    } catch {
-      console.error('[useMaintenance] Error parsing localStorage, using seed.')
-    }
-    return seedMaintenance
-  })
+  const [orders, setOrders] = useState<MaintenanceOrder[]>(seedMaintenance)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {

@@ -1,12 +1,20 @@
-import { createContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import { supabase } from '../lib/supabase'
-import type { User, Session } from '@supabase/supabase-js'
+import { createContext, useEffect, useMemo, type ReactNode } from 'react'
+import { useAuth as useClerkAuth, useUser, useClerk } from '@clerk/clerk-react'
+import { setAuthTokenProvider } from '../services'
 
-const DEV_AUTH_KEY = 'tooltrack_dev_auth'
+/**
+ * Compat shape: mimics enough of the previous Supabase User to keep
+ * existing consumers (Header, Sidebar, ProtectedRoute) working unchanged.
+ */
+export interface AuthUser {
+  id: string
+  email: string
+  user_metadata: { full_name?: string }
+}
 
 export interface AuthState {
-  user: User | null
-  session: Session | null
+  user: AuthUser | null
+  session: null
   isLoading: boolean
   isAuthenticated: boolean
   isMockMode: boolean
@@ -20,141 +28,63 @@ export interface AuthContextValue extends AuthState {
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextValue | null>(null)
 
-const isSupabaseUnavailable = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY
-
-function loadMockUser(): User | null {
-  const raw = localStorage.getItem(DEV_AUTH_KEY)
-  if (!raw) return null
-  try {
-    return JSON.parse(raw) as User
-  } catch {
-    return null
-  }
-}
-
-function saveMockUser(user: User | null) {
-  if (user) localStorage.setItem(DEV_AUTH_KEY, JSON.stringify(user))
-  else localStorage.removeItem(DEV_AUTH_KEY)
-}
-
-function createMockUser(email: string): User {
-  return {
-    id: 'dev-user-id',
-    email,
-    app_metadata: {},
-    user_metadata: { full_name: email.split('@')[0] },
-    aud: 'authenticated',
-    created_at: new Date().toISOString(),
-  }
-}
-
-function getInitialState(): AuthState {
-  if (isSupabaseUnavailable) {
-    const mockUser = loadMockUser()
-    return {
-      user: mockUser,
-      session: null,
-      isLoading: false,
-      isAuthenticated: !!mockUser,
-      isMockMode: true,
-    }
-  }
-  return {
-    user: null,
-    session: null,
-    isLoading: true,
-    isAuthenticated: false,
-    isMockMode: false,
-  }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>(getInitialState)
+  const { isLoaded, isSignedIn, getToken, signOut: clerkSignOut } = useClerkAuth()
+  const { user: clerkUser } = useUser()
+  const clerk = useClerk()
 
+  // Wire the token provider for apiAdapter as soon as we know signed-in state.
   useEffect(() => {
-    if (isSupabaseUnavailable) return
-
-    let mounted = true
-    let stateVersion = 0
-
-    async function initSession() {
-      const { data, error } = await supabase.auth.getSession()
-      if (!mounted) return
-      if (error) {
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          isAuthenticated: false,
-        }))
-        return
+    setAuthTokenProvider(async () => {
+      try {
+        return await getToken()
+      } catch {
+        return null
       }
-      const version = ++stateVersion
-      setState(current => {
-        if (version < stateVersion) return current
-        return {
-          user: data.session?.user ?? null,
-          session: data.session ?? null,
-          isLoading: false,
-          isAuthenticated: !!data.session?.user,
-          isMockMode: false,
-        }
-      })
-    }
-
-    void initSession()
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!mounted) return
-      ++stateVersion
-      setState({
-        user: session?.user ?? null,
-        session: session ?? null,
-        isLoading: false,
-        isAuthenticated: !!session?.user,
-        isMockMode: false,
-      })
     })
+  }, [getToken, isSignedIn])
 
-    return () => {
-      mounted = false
-      listener.subscription.unsubscribe()
+  const value = useMemo<AuthContextValue>(() => {
+    const user: AuthUser | null = clerkUser
+      ? {
+          id: clerkUser.id,
+          email:
+            clerkUser.primaryEmailAddress?.emailAddress ??
+            clerkUser.emailAddresses[0]?.emailAddress ??
+            '',
+          user_metadata: {
+            full_name:
+              clerkUser.fullName ??
+              [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' '),
+          },
+        }
+      : null
+
+    return {
+      user,
+      session: null,
+      isLoading: !isLoaded,
+      isAuthenticated: !!isSignedIn,
+      isMockMode: false,
+      signIn: async (email: string, password: string) => {
+        try {
+          const res = await clerk.client.signIn.create({ identifier: email, password })
+          if (res.status === 'complete') {
+            await clerk.setActive({ session: res.createdSessionId })
+            return { error: null }
+          }
+          return { error: new Error('signIn status: ' + res.status) }
+        } catch (e) {
+          const errObj = e as { errors?: { message: string }[]; message?: string }
+          const msg = errObj.errors?.[0]?.message ?? errObj.message ?? 'Error de autenticacion'
+          return { error: new Error(msg) }
+        }
+      },
+      signOut: async () => {
+        await clerkSignOut()
+      },
     }
-  }, [])
+  }, [clerkUser, isLoaded, isSignedIn, clerk, clerkSignOut])
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    if (state.isMockMode) {
-      const mockUser = createMockUser(email)
-      saveMockUser(mockUser)
-      setState(prev => ({
-        ...prev,
-        user: mockUser,
-        isAuthenticated: true,
-      }))
-      return { error: null }
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error: error ?? null }
-  }, [state.isMockMode])
-
-  const signOut = useCallback(async () => {
-    if (state.isMockMode) {
-      saveMockUser(null)
-      setState(prev => ({
-        ...prev,
-        user: null,
-        session: null,
-        isAuthenticated: false,
-      }))
-      return
-    }
-
-    await supabase.auth.signOut()
-  }, [state.isMockMode])
-
-  return (
-    <AuthContext.Provider value={{ ...state, signIn, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

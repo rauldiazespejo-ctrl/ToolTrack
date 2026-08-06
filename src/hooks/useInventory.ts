@@ -6,15 +6,7 @@ import { createAdapter } from '../services'
 const adapter = createAdapter<InventoryItem>('tooltrack_inventory', 'inventory', seedInventory)
 
 export function useInventory() {
-  const [inventory, setInventory] = useState<InventoryItem[]>(() => {
-    try {
-      const stored = localStorage.getItem('tooltrack_inventory')
-      if (stored) return JSON.parse(stored)
-    } catch {
-      console.error('[useInventory] Error parsing localStorage, using seed.')
-    }
-    return seedInventory
-  })
+  const [inventory, setInventory] = useState<InventoryItem[]>(seedInventory)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -79,7 +71,7 @@ export function useInventory() {
       last_restock: delta > 0 ? new Date().toISOString().split('T')[0] : item.last_restock,
     })
     setInventory(prev => prev.map(i => i.id === id ? updated : i))
-    void reason
+    console.info(`[useInventory] adjustStock ${item.name}: ${delta > 0 ? '+' : ''}${delta} (${reason || 'sin motivo'})`)
   }, [])
 
   const lowStockItems = inventory.filter(item => item.quantity < item.min_stock)

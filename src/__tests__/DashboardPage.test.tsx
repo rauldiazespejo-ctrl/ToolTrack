@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { DashboardPage } from '../pages/DashboardPage'
 
@@ -54,17 +54,17 @@ vi.mock('../hooks/useActivityLog', () => ({
 
 describe('DashboardPage', () => {
   it('renders stat cards with correct labels', () => {
-    render(
+    const { getByText, getAllByText } = render(
       <MemoryRouter>
         <DashboardPage />
       </MemoryRouter>,
     )
-    expect(screen.getByText('Total Equipos')).toBeInTheDocument()
-    expect(screen.getByText('10')).toBeInTheDocument()
-    expect(screen.getByText('En Uso')).toBeInTheDocument()
-    expect(screen.getByText('En Mantención')).toBeInTheDocument()
-    expect(screen.getByText('Alertas Activas')).toBeInTheDocument()
-    expect(screen.getAllByText('Stock Bajo').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Valor Activos')).toBeInTheDocument()
+    expect(getByText('Total Equipos')).toBeInTheDocument()
+    expect(getByText('10')).toBeInTheDocument()
+    expect(getByText('En Uso')).toBeInTheDocument()
+    expect(getByText('En Mantención')).toBeInTheDocument()
+    expect(getByText('Alertas Activas')).toBeInTheDocument()
+    expect(getAllByText('Stock Bajo').length).toBeGreaterThanOrEqual(1)
+    expect(getByText('Valor Activos')).toBeInTheDocument()
   })
 })

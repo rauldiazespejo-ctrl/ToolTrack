@@ -6,15 +6,7 @@ import { createAdapter } from '../services'
 const adapter = createAdapter<ActivityLog>('tooltrack_activity_log', 'activity_logs', seedActivityLog)
 
 export function useActivityLog() {
-  const [logs, setLogs] = useState<ActivityLog[]>(() => {
-    try {
-      const stored = localStorage.getItem('tooltrack_activity_log')
-      if (stored) return JSON.parse(stored)
-    } catch {
-      console.error('[useActivityLog] Error parsing localStorage, using seed.')
-    }
-    return seedActivityLog
-  })
+  const [logs, setLogs] = useState<ActivityLog[]>(seedActivityLog)
 
   useEffect(() => {
     let mounted = true
