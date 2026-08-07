@@ -1,0 +1,3 @@
+## 2024-05-15 - Missing ARIA Labels on Icon-only Layout Buttons
+**Learning:** Icon-only interactive elements in key layout components (like Header notifications, Sidebar mobile menus, and logout buttons) frequently lack `aria-label` attributes and standard keyboard focus states. Since these components bypass global UI abstractions like `<Button>`, they require manual accessibility styling.
+**Action:** Always manually check and implement `aria-label`s and standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) on native HTML `<button>` and `<input>` elements within custom layout components.
