@@ -1,0 +1,5 @@
+## 2026-08-08 - Accessible Focus States for Layout Components
+
+**Learning:** When working on layout components (like Header and Sidebar) in this project, they often bypass the global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements directly. This means they are completely missing standard accessibility practices like `aria-label`s and proper focus indicators for keyboard navigation.
+
+**Action:** Whenever introducing or modifying native HTML layout elements that act as interactive components, always manually implement `aria-label`s for icon-only buttons. Additionally, remember to manually apply the standard focus-visible utility classes: `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` to ensure consistent and visible focus states across the application.
