@@ -1,0 +1,3 @@
+## 2024-05-18 - Componentes de diseño que evitan abstracciones de UI globales
+**Learning:** En este proyecto, componentes de estructura o diseño como el Header y el Sidebar frecuentemente evitan usar componentes globales como `<Button>` o `<Input>` y en su lugar usan los elementos nativos `<button>` e `<input>` directamente.
+**Action:** Al trabajar con componentes de layout o estructura básica (Header, Sidebar, AppLayout), hay que revisar manualmente la presencia de atributos `aria-label` en botones con solo íconos, así como aplicar manualmente las clases de estilo `focus-visible` estándares (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) para asegurar la accesibilidad con teclado y lectores de pantalla.
