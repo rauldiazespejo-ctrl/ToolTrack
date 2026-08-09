@@ -1,0 +1,5 @@
+## 2024-08-09 - Layout Component Accessibility
+
+**Learning:** Core layout components (like Header and Sidebar) frequently bypass global UI abstractions (e.g., standard `<Button>` components) and use native HTML `<button>` and `<input>` elements for specific styling and structural needs. As a result, they miss out on built-in accessibility features that might be provided by a design system component.
+
+**Action:** When working on top-level layout or navigation components, manually inspect all interactive elements. Explicitly apply `aria-label`s to icon-only controls and implement standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure keyboard navigability and screen reader support are maintained.
