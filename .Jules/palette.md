@@ -1,0 +1,5 @@
+## 2026-08-11 - Manual Accessibility Implementation for Native Elements in Layout Components
+
+**Learning:** Layout components in this application (such as `Header` and `Sidebar`) frequently bypass global UI abstractions like `<Button>` and `<Input>`. Instead, they rely on native HTML `<button>` and `<input>` elements. Because of this architectural choice, standard accessibility practices—such as applying `aria-label`s for icon-only buttons and defining consistent focus-visible utility classes (e.g., `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`)—are not automatically inherited.
+
+**Action:** When making updates or adding new interactive elements within these specific layout components, it is crucial to explicitly apply accessibility attributes (like `aria-label`s, prioritizing Spanish copy) and manually implement the standard keyboard focus classes directly on the native HTML elements to ensure the application remains fully accessible.
