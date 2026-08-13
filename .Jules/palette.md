@@ -1,0 +1,3 @@
+## 2024-05-18 - Native Button Accessibility in Layouts
+**Learning:** Layout components (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` elements for custom styling. Because of this, they miss out on central accessibility features.
+**Action:** When working on layout components or reviewing PRs that touch them, explicitly check native `<button>` and `<input>` elements for missing `aria-label`s and ensure standard focus-visible utility classes are manually applied to maintain keyboard navigation consistency.
