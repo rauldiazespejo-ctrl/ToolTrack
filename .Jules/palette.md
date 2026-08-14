@@ -1,0 +1,4 @@
+## 2026-05-14 - Layout Components Bypass Global UI Abstractions
+
+**Learning:** In this application, core layout components (like Header and Sidebar) frequently bypass global UI abstractions (e.g., a shared `<Button>` component) and instead use native HTML `<button>` and `<input>` elements directly.
+**Action:** When working on accessibility tasks or modifying layout components, I must be vigilant to manually implement standard accessibility attributes (such as `aria-label`s for icon-only buttons) and standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`), as they won't automatically inherit them from a global UI component.
