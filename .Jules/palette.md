@@ -1,0 +1,3 @@
+## 2024-05-18 - Missing Accessibility in Custom Layout Components
+**Learning:** This app's layout components (`Header`, `Sidebar`) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements. This leads to missing ARIA labels for icon-only buttons and lack of standardized focus states.
+**Action:** When working with layout components, explicitly check for missing `aria-label`s on icon buttons and ensure standard focus visibility utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) are manually applied.
