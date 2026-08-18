@@ -1,0 +1,3 @@
+## 2026-08-18 - Adding accessibility styles to native HTML elements
+**Learning:** Native HTML elements in layout components (like Header and Sidebar) frequently bypass the global UI components (like <Button> and <Input>). Because they bypass those wrappers, they lack the global design system's built-in focus-visible outline utility classes and frequently omit necessary `aria-label` attributes on icon-only buttons.
+**Action:** When working on layout components, always check for raw HTML buttons or inputs and ensure they manually implement `aria-label`s and the project's standard `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` utility classes for keyboard accessibility.
