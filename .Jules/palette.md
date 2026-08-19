@@ -1,0 +1,3 @@
+## 2024-10-24 - Layout Component Accessibility Defaults
+**Learning:** Native `<button>` and `<input>` elements used directly in layout components (like Header and Sidebar) often lack standard app-wide accessibility properties because they bypass shared UI abstractions like `<Button>`.
+**Action:** When modifying or reviewing layout components, manually implement explicit `aria-label`s for icon-only elements and apply the app's standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure keyboard accessibility.
