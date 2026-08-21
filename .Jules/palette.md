@@ -1,0 +1,3 @@
+## 2024-03-24 - [Layout Components Accessibility]
+**Learning:** In projects where layout components like Header and Sidebar bypass global UI abstractions, native HTML elements (`<button>`, `<input>`) often lack crucial accessibility attributes (e.g., `aria-label`) and focus states.
+**Action:** Always manually implement `aria-label`s and the standard focus-visible utility classes (e.g., `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) on interactive native elements within layout components to ensure full keyboard and screen reader accessibility.
