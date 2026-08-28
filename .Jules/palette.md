@@ -1,0 +1,3 @@
+## 2024-08-28 - Missing accessibility attributes on layout component buttons
+**Learning:** Native `<button>` elements used in layout components (like Header and Sidebar) frequently bypass the global UI `<Button>` abstraction in this project. This pattern consistently results in missing `aria-label`s for icon-only buttons and absent `focus-visible` states for keyboard navigation.
+**Action:** When auditing or building layout components, manually implement `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure they meet the project's accessibility baseline.
