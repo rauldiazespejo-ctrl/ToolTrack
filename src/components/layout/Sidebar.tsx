@@ -57,9 +57,10 @@ export function Sidebar() {
     <>
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-[var(--bg-card)] p-2 text-[var(--text-secondary)] lg:hidden cursor-pointer border border-[var(--border)]"
+        aria-label="Abrir menú de navegación"
+        className="fixed top-4 left-4 z-50 rounded-lg bg-[var(--bg-card)] p-2 text-[var(--text-secondary)] lg:hidden cursor-pointer border border-[var(--border)] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
-        <Menu size={20} />
+        <Menu size={20} aria-hidden="true" />
       </button>
 
       {mobileOpen && (
@@ -85,9 +86,10 @@ export function Sidebar() {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
-            className="rounded-lg p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer"
+            aria-label="Cerrar menú"
+            className="rounded-lg p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] lg:hidden cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -124,10 +126,11 @@ export function Sidebar() {
             </div>
             <button
               onClick={() => { void handleLogout(); }}
-              className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer"
+              className="shrink-0 rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+              aria-label="Cerrar sesión"
               title="Cerrar sesion"
             >
-              <LogOut size={16} />
+              <LogOut size={16} aria-hidden="true" />
             </button>
           </div>
         </div>
