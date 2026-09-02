@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility improvements on native HTML elements
+**Learning:** Layout components in this app (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements. When working with these components, manually implement `aria-label`s and the standard focus-visible utility classes to ensure accessibility.
+**Action:** Always check native interactive elements for missing ARIA labels and focus states, and apply the standard project convention (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
