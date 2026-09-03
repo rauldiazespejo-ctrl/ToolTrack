@@ -1,0 +1,3 @@
+## 2024-10-24 - Layout Component Accessibility
+**Learning:** Custom layout components (like Header and Sidebar) frequently bypass global UI abstractions (like `<Button>`) and use native HTML `<button>` and `<input>` elements. Because of this, they often lack standard accessibility features like `aria-label`s for icon-only buttons and the standard focus-visible utility classes, which can lead to poor keyboard navigation and screen reader support on primary navigation elements.
+**Action:** When auditing or modifying layout components, explicitly check for native interactive elements and manually add Spanish `aria-label`s and standard focus utilities (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
