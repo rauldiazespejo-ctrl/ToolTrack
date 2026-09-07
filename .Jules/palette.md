@@ -1,0 +1,3 @@
+## 2024-05-18 - Standardizing Accessibility on Layout Components
+**Learning:** Native layout components like `<button>` and `<input>` in Header/Sidebar frequently bypass global UI abstractions. They lack ARIA labels and focus indicators, creating accessibility gaps for keyboard and screen reader users.
+**Action:** When working on generic layout components, always ensure icon-only buttons include `aria-label`s and native form elements (like search) have corresponding labels/attributes. Apply standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to provide clear visual feedback.
