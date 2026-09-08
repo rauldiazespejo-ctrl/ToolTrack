@@ -1,0 +1,3 @@
+## 2024-11-20 - Keyboard Accessibility & ARIA in Layout Components
+**Learning:** Native HTML interactive elements (`<button>`, `<input>`, `<a>`) used directly in layout components (like Header and Sidebar) often miss the global accessibility styles provided by abstractions like `<Button>`. They frequently lack both `aria-label`s for icon-only buttons and visible focus rings (`focus-visible:outline...`), hindering screen reader usage and keyboard navigation.
+**Action:** When inspecting layout components, specifically look for raw native interactive elements and manually apply the standard focus-visible utility classes and appropriate Spanish `aria-label`s if they are icon-only.
