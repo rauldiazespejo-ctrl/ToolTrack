@@ -1,0 +1,3 @@
+## 2024-05-24 - Missing Accessibility in Layout Components
+**Learning:** Core layout components (Header, Sidebar) bypass global UI abstractions like `<Button>` and use native HTML elements. This requires manually applying accessibility attributes (`aria-label`) and standard focus states (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
+**Action:** When touching or reviewing layout components that use raw `<button>` and `<input>` elements, proactively add `aria-label`s and standard `focus-visible` utility classes to ensure robust accessibility across the app.
