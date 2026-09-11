@@ -1,0 +1,3 @@
+## 2024-03-21 - Layout Navigation Buttons Focus States
+**Learning:** Layout components (like Header and Sidebar) frequently use native HTML `<button>` elements for icon-only actions instead of global UI abstractions like `<Button>`, which results in them missing standard focus-visible styles and ARIA labels.
+**Action:** Always manually verify and apply standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) and ARIA labels to raw HTML elements in layout structural components.
