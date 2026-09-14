@@ -1,0 +1,3 @@
+## 2024-05-24 - Missing ARIA Labels in Layout Components
+**Learning:** Core layout components in this app (like Header and Sidebar) frequently bypass the global UI abstractions (like `<Button>`) and use native HTML `<button>` and `<input>` elements. Because of this, they lacked basic accessibility features out of the box.
+**Action:** When working on layout or higher-level components that don't use design system primitives, manually verify and implement `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
