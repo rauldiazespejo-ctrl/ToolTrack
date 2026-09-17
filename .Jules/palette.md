@@ -1,0 +1,3 @@
+## 2024-05-24 - Layout Accessibility & Native HTML Components
+**Learning:** Layout components in this app (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements. Because of this, accessibility features that might be built into a design system (like aria-labels for icon-only buttons and standard focus-visible styles) are completely missing in these high-traffic components.
+**Action:** When working on UX tasks affecting layout components, I must explicitly implement `aria-label`s and the standard focus state convention (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure comprehensive keyboard and screen reader accessibility.
