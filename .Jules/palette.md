@@ -1,0 +1,3 @@
+## 2024-05-23 - Focus states and ARIA labels for icon buttons in Layout components
+**Learning:** Layout components like Header and Sidebar in this app frequently bypass global UI abstractions (like `<Button>`) and use native HTML `<button>` elements, missing default accessibility improvements. Standard focus state convention in this project uses specific Tailwind utility classes: `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`.
+**Action:** Always manually implement `aria-label`s and the standard focus-visible utility classes when working with native buttons in these layout components to ensure keyboard and screen reader accessibility.
