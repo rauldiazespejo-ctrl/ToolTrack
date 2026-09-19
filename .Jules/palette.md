@@ -1,0 +1,3 @@
+## 2024-09-19 - Layout Components Need Manual Accessibility Enhancements
+**Learning:** I noticed that layout components in this app (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and instead use native HTML `<button>` and `<input>` elements. Because of this, these layout components lack standard accessibility features by default.
+**Action:** When working on layout components, always check for native interactive elements and manually implement `aria-label`s and the standard keyboard focus utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure full keyboard accessibility.
