@@ -1,0 +1,3 @@
+## 2024-09-20 - Layout Component Accessibility
+**Learning:** Layout components (like Header and Sidebar) in this codebase often bypass the standard `<Button>` abstraction, relying on native `<button>` and `<input>` elements. Because of this, they miss out on built-in accessibility features (like standard focus rings or ARIA labels for icon-only actions).
+**Action:** When working on layout components or native interactive elements, manually ensure they have appropriate `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
