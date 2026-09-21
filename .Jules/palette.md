@@ -1,0 +1,3 @@
+## 2024-05-20 - Adding Accessibility Attributes to Layout Components
+**Learning:** Native HTML elements like `<button>` and `<input>` in layout components (e.g., Header, Sidebar) do not inherit global accessibility features such as ARIA labels or `focus-visible` states, which are normally provided by shared abstractions like `<Button>`.
+**Action:** When working with layout components that bypass global UI abstractions, manually implement `aria-label`s and standard `focus-visible` utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure these critical navigational elements remain accessible.
