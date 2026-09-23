@@ -1,0 +1,3 @@
+## 2026-09-23 - Native buttons in Layout missing a11y attributes
+**Learning:** Layout components in this app (Header, Sidebar) frequently bypass the global `<Button>` abstraction and use native HTML `<button>` and `<input>` elements. Consequently, they lack standard `aria-label`s for icon-only actions and keyboard focus states.
+**Action:** When working with layout components or custom UI, manually implement `aria-label`s and standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure accessibility.
