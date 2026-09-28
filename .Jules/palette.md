@@ -1,0 +1,3 @@
+## 2024-05-19 - Layout Level Button Accessibility
+**Learning:** Native `button` and `input` elements used globally across layout components (e.g. Header and Sidebar) frequently lack `aria-label` attributes for icon-only actions and missing standard keyboard focus states.
+**Action:** When inspecting layout components (Header, Sidebar), explicitly verify and add `aria-label` (using Spanish translations) and standardize keyboard accessibility with focus states: `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`. Avoid non-accessible `title` attributes on buttons.
