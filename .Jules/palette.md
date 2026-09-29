@@ -1,0 +1,3 @@
+## 2024-05-19 - Layout Component Native Elements
+**Learning:** Core layout components (like Header and Sidebar) frequently bypass the global `<Button>` abstraction in favor of native HTML `<button>` and `<input>` elements. This causes these interactive elements to lack default accessibility attributes and focus states out-of-the-box.
+**Action:** When working on layout components, always manually verify and implement `aria-label`s for icon-only buttons and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure proper keyboard accessibility.
