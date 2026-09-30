@@ -1,0 +1,3 @@
+## 2024-10-24 - Accessibility in Layout Components
+**Learning:** Native HTML `<button>` and `<input>` elements in layout and UI components (like Header, Sidebar, Modal) were found to lack standardized aria-labels, titles, and focus states, likely because they bypass the global abstracted UI components (like `<Button>`).
+**Action:** Always verify that native interactive elements used directly in layout structures have explicit aria-labels, titles, and standard `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` classes to ensure full accessibility compliance.
