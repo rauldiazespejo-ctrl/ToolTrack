@@ -1,0 +1,3 @@
+## 2024-10-05 - Missing Accessibility Attributes on Native Elements
+**Learning:** Core layout components (like Header and Sidebar) in this repository often use native HTML `<button>` and `<input>` tags instead of the global abstracted `<Button>` or `<Input>` UI components. As a result, they miss out on built-in accessibility features (like standard focus states) and frequently lack required ARIA attributes for icon-only buttons.
+**Action:** When auditing core layout files, manually verify that native elements have appropriate Spanish `aria-label`s and the standard Tailwind focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) applied.
