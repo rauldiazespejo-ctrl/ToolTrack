@@ -1,0 +1,3 @@
+## 2024-05-19 - Layout Components Missing A11y Attributes
+**Learning:** Native HTML elements (`<button>`, `<input>`) in layout components like Header and Sidebar frequently bypass global UI abstractions, leading to missing basic accessibility attributes like ARIA labels for icon-only buttons and proper focus indicators for keyboard navigation.
+**Action:** When auditing layout files, manually verify and apply translations for `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to all native interactive elements.
