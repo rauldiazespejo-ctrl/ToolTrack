@@ -1,0 +1,3 @@
+## 2024-05-15 - Missing Accessibility on Native Layout Buttons
+**Learning:** Native `<button>` and `<input>` elements in layout components (like Header and Sidebar) frequently bypass the accessibility protections built into the global UI abstractions (e.g., `<Button>`), leading to missing ARIA labels and focus states.
+**Action:** When working with or reviewing un-abstracted layout components, explicitly check for and manually implement standard `aria-label` attributes for icon-only buttons and the standard project focus states (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`).
