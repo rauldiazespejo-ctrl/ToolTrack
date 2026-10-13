@@ -1,0 +1,3 @@
+## 2024-05-14 - Layout Components Missing Basic Accessibility Properties
+**Learning:** Found that custom layout components (like Header and Sidebar) which bypass the global `<Button>` abstraction and use native HTML `<button>` and `<input>` elements often miss standard accessibility attributes like `aria-label` for icon-only buttons, hidden labels for inputs, and proper keyboard focus rings.
+**Action:** Always manually implement `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) on interactive elements within custom layout components to ensure full keyboard accessibility and screen reader support.
