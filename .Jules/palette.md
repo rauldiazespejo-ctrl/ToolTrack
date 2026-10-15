@@ -1,0 +1,3 @@
+## 2026-10-15 - Manual Accessibility for Native HTML Elements in Layout Components
+**Learning:** Discovered that core layout components (like `Header` and `Sidebar`) in this app frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements instead. This pattern requires manual implementation of standard accessibility attributes (e.g., `aria-label`) and focus states (`focus-visible` utility classes) that would otherwise be handled by the UI library abstractions.
+**Action:** When auditing or adding features to layout-level components, proactively check for raw native interactive elements and manually apply the project's standard focus utilities and ARIA labels to maintain accessibility.
