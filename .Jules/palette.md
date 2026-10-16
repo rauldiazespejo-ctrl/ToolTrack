@@ -1,0 +1,3 @@
+## 2024-05-15 - Missing ARIA attributes and focus states on layout buttons
+**Learning:** Layout components (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements. When working with these components, we cannot rely on the design system components to automatically provide baseline accessibility features.
+**Action:** Always manually verify and implement `aria-label`s and the standard focus-visible utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) when modifying native interactive elements in layout components.
