@@ -1,0 +1,3 @@
+## 2024-06-28 - Missing accessibility features on Core components
+**Learning:** Found that core layout components (`Header`, `Sidebar`, `Button`) lacked keyboard navigation indications and appropriate ARIA labels on icon-only interactive elements. Found missing Spanish ARIA labels for icon-only buttons as ToolTrack is targeted for Spanish users.
+**Action:** Applied standard focus state convention `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` and appropriate Spanish `aria-label`s to `Button`, `Header` and `Sidebar` elements. Will ensure these standard a11y practices are checked consistently on other interactive components across the system.
