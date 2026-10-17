@@ -257,14 +257,14 @@ export function MaintenancePage() {
                 <TableCell>
                   <div className="flex items-center gap-1">
                     {order.status !== 'completado' && (
-                      <button onClick={() => { handleCompleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
+                      <button aria-label="Completar" onClick={() => { handleCompleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-green-400 transition-colors cursor-pointer" title="Completar">
                         <CheckCircle2 size={16} />
                       </button>
                     )}
-                    <button onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
+                    <button aria-label="Editar" onClick={() => openEdit(order)} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-blue-400 transition-colors cursor-pointer" title="Editar">
                       <Wrench size={16} />
                     </button>
-                    <button onClick={() => { handleDeleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
+                    <button aria-label="Eliminar" onClick={() => { handleDeleteOrder(order.id); }} className="rounded p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-red-400 transition-colors cursor-pointer" title="Eliminar">
                       <AlertTriangle size={16} />
                     </button>
                   </div>
