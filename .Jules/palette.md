@@ -1,0 +1,3 @@
+## 2024-10-24 - Layout Accessibility Updates
+**Learning:** Native layout elements like Header and Sidebar typically use raw `<button>` and `<input>` elements rather than global UI components to allow flexibility, but this means they often miss critical ARIA labels for icon-only buttons and default standard focus indicators, requiring explicit application of `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` classes and translated `aria-label`s.
+**Action:** When updating layouts, actively search for native interactive elements and apply standardized `focus-visible` classes and descriptive `aria-label`s, ensuring consistency with generic global UI buttons.
