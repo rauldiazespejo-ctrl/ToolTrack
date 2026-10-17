@@ -1,0 +1,3 @@
+## 2026-07-21 - Accessible Icon Buttons and Consistent Focus States
+**Learning:** Icon-only buttons (like notifications, mobile menu toggles, modal close buttons) in this app often lack `aria-label`s, rendering them invisible or confusing to screen readers. Furthermore, the standard focus state convention for this project requires specific Tailwind utility classes (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) to ensure proper keyboard navigation visibility.
+**Action:** Always verify that icon-only buttons have descriptive `aria-label`s in Spanish. Routinely apply the standard focus state utility classes to all interactive elements to maintain a consistent and accessible keyboard navigation experience.
