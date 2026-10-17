@@ -304,10 +304,10 @@ export function EquipmentPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
-                    <Button variant="ghost" size="sm" onClick={() => openEdit(eq)}>
+                    <Button variant="ghost" size="sm" onClick={() => openEdit(eq)} aria-label={`Editar ${eq.name}`} title="Editar">
                       <Pencil size={14} />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(eq.id)}>
+                    <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(eq.id)} aria-label={`Eliminar ${eq.name}`} title="Eliminar">
                       <Trash2 size={14} className="text-red-400" />
                     </Button>
                   </div>
