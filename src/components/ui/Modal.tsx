@@ -40,6 +40,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
           <button
+            aria-label="Cerrar modal"
+            title="Cerrar modal"
             onClick={onClose}
             className="rounded-lg p-1 text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors cursor-pointer"
           >
