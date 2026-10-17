@@ -1,0 +1,3 @@
+## 2024-07-09 - Accessible Icon Buttons & Keyboard Navigation
+**Learning:** Many table actions use icon-only `<button>` or `<Button variant="ghost">` elements without `aria-label`s, making them invisible or confusing to screen reader users. Additionally, the standard focus state convention (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) was missing from the core `Button` component and raw action buttons, preventing clear keyboard navigation.
+**Action:** Always add Spanish `aria-label` attributes to icon-only interactive elements and ensure all interactive elements apply the standard `focus-visible` utility classes for keyboard accessibility.
