@@ -54,6 +54,7 @@ export function Header() {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
           <input
             type="text"
+            aria-label="Buscar equipos, inventario"
             placeholder="Buscar equipos, inventario..."
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
@@ -61,7 +62,10 @@ export function Header() {
           />
         </div>
 
-        <button className="relative rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors cursor-pointer">
+        <button
+          aria-label="Notificaciones"
+          className="relative rounded-lg p-2 text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+        >
           <Bell size={20} />
           {unreadCount > 0 && (
             <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--danger)] text-[10px] font-bold text-white">
