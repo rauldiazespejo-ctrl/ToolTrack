@@ -1,0 +1,3 @@
+## 2026-07-07 - Global component accessibility
+**Learning:** Found multiple icon-only buttons (like notifications, modal close) lacking accessible names, and interactive elements lacking keyboard focus rings `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` which makes keyboard navigation difficult. Standard components need accessible roles, states, names, and explicit focus states.
+**Action:** When creating standard UI components or layout elements (like Header, Modal), enforce inclusion of `aria-label` for icon-only buttons and the standard `focus-visible` classes to ensure they are accessible.
