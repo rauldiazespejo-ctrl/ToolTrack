@@ -1,0 +1,3 @@
+## 2024-10-23 - Keyboard accessibility and ARIA labels in layout components
+**Learning:** Layout components (like Header and Sidebar) frequently bypass global UI abstractions like `<Button>` and use native HTML `<button>` and `<input>` elements. Because of this, it is crucial to manually implement `aria-label`s and standard focus-visible utility classes to ensure accessibility.
+**Action:** Always verify if newly created native HTML input/button elements in layout or global components have proper ARIA attributes and focus styles applied. Apply standard focus styling like `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`.
