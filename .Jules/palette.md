@@ -1,0 +1,3 @@
+## 2023-10-28 - Layout Components Accessibility
+**Learning:** Layout components (like Header and Sidebar) frequently bypass global UI abstractions and use native HTML elements (buttons, inputs) without built-in accessibility. These elements need careful attention to ensure they are accessible.
+**Action:** When working with layout components that use native HTML elements, always manually implement `aria-label`s for icon-only buttons and add standard focus-visible utility classes (`focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] outline-none`) to ensure keyboard accessibility.
