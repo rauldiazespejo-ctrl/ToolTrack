@@ -1,0 +1,3 @@
+## 2024-11-01 - Layout Components Focus States and Accessibility
+**Learning:** Layout components in this app (like Header and Sidebar) frequently bypass the global UI abstractions like `<Button>` and use native HTML `<button>` and `<NavLink>` elements. This requires manual implementation of standard focus-visible utility classes and `aria-label`s for icon-only buttons to maintain accessibility.
+**Action:** When working on navigation or layout components, manually add `outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]` and `aria-label`s where necessary, instead of relying on the global Button component.
