@@ -1,0 +1,3 @@
+## 2024-05-19 - Missing ARIA Labels on Native Elements in Layout Components
+**Learning:** Native `<button>` and `<input>` elements used directly in layout components (like Header and Sidebar) frequently lack `aria-label` attributes and standard focus-visible styles, bypassing the global `<Button>` component abstractions.
+**Action:** When auditing custom or layout components that don't use design system primitives, explicitly check for missing `aria-label`s on icon-only buttons and ensure standard focus-visible styles (`outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`) are manually applied.
